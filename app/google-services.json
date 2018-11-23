@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1005969324674",
+    "firebase_url": "https://catchem2-7adda.firebaseio.com",
+    "project_id": "catchem2-7adda",
+    "storage_bucket": "catchem2-7adda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005969324674:android:495ec116566e4f5c",
+        "android_client_info": {
+          "package_name": "catchem.catchem2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005969324674-ovdeccnvp52t5cf572hqsc142p4cvmsn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "catchem.catchem2",
+            "certificate_hash": "345ad0663650910ab454c0f1f3347140ab7feaec"
+          }
+        },
+        {
+          "client_id": "1005969324674-c234b0ioo5pagdlec69l0ctnitvfakm2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9Vl6YsGlCCMbCle-pWG26dAs_fM8jq9U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005969324674-c234b0ioo5pagdlec69l0ctnitvfakm2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
