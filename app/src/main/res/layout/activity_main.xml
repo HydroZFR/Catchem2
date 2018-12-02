@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="466dp" />
+
+    <ImageView
+        android:id="@+id/pictView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@color/colorAccent" />
+
+    <LinearLayout
+        android:id="@+id/underView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".MainActivity">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/edit_text_nom"
+        <LinearLayout
+            android:id="@+id/plaqueView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nom"
-            android:inputType="text"/>
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:gravity="center_vertical|center_horizontal">
 
-        <EditText
-            android:id="@+id/edit_text_prenom"
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/didactView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Prenom"
-            android:inputType="text"/>
-
-        <Button
-            android:id="@+id/button_envoyer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Envoyer"
-            android:onClick="envoyer"/>
+            app:srcCompat="@mipmap/ic_launcher" />
 
     </LinearLayout>
+</android.support.constraint.ConstraintLayout>
