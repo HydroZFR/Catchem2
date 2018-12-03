@@ -1,4 +1,4 @@
-package catchem.catchem2;
+package catchem.catchem2.menu;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import catchem.catchem2.R;
 
 public class Menu_MD_ajouterDonner extends AppCompatActivity {
 

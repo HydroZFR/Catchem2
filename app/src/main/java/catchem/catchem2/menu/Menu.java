@@ -1,4 +1,4 @@
-package catchem.catchem2;
+package catchem.catchem2.menu;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,7 @@ import android.widget.Button;
 
 
 import catchem.catchem2.MainActivity;
-import catchem.catchem2.Menu_Historique;
-import catchem.catchem2.Menu_ModifierDonnee;
-import catchem.catchem2.Menu_ModifierMail;
+import catchem.catchem2.R;
 
 public class Menu extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
 
