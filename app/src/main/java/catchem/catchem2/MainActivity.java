@@ -27,10 +27,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private EditText editTextNom;
     private EditText editTextPrenom;
     private Button buttonEnvoyer;
-    private final static String KEY_NOM = "nom";
-    private final static String KEY_PRENOM = "prenom";
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    private final static String KEY_NOM = "nom";
+//    private final static String KEY_PRENOM = "prenom";
+//    private final static String KEY_PLAQUE = "plaque";
+//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static BDD uneBDD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +43,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         gestureDetector = new GestureDetectorCompat(this, this);
         gestureDetector.setOnDoubleTapListener(this);
+        uneBDD = new BDD();
     }
 
     public void envoyer(View v) {
         String nom = editTextNom.getText().toString();
         String prenom = editTextPrenom.getText().toString();
-
-        Map<String, Object> user = new HashMap<>();
-        user.put(KEY_NOM, nom);
-        user.put(KEY_PRENOM, prenom);
-
-        db.collection("users").document().set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(MainActivity.this, "Succès", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "Error !", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        uneBDD.ajouterPersonne(this, nom, prenom);
     }
 
     @Override
