@@ -36,11 +36,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
         if (this.verifChamp()){
             String adresseMail = mail.getText().toString();
             Log.i("test","mail = "+mail.getText().toString());
-         /*
-        ...
-        Ici on fait pas l'enregistrement dans la BDD nous
-        ...
-         */
+
             Toast.makeText(this, "Enregistrer", Toast.LENGTH_SHORT).show();
         }
         else
