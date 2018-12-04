@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import catchem.catchem2.MainActivity;
 import catchem.catchem2.R;
 
 public class Menu_ModifierMail extends AppCompatActivity {
@@ -21,35 +22,35 @@ public class Menu_ModifierMail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_modifier_mail);
-      mail = (EditText) findViewById(R.id.mail);
-       enregistrement = (Button) findViewById(R.id.enregistrer);
-       enregistrement.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               enregistrer();
-           }
-       });
+        setContentView(R.layout.activity_modifier_mail);
+        mail = (EditText) findViewById(R.id.mail);
+        mail.setText(MainActivity.uneBDD.getMailSignalement());
+        enregistrement = (Button) findViewById(R.id.enregistrer);
+        enregistrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                enregistrer();
+            }
+        });
     }
 
-    private void enregistrer(){
-        if (this.verifChamp()){
+    private void enregistrer() {
+        if (this.verifChamp()) {
             String adresseMail = mail.getText().toString();
-            Log.i("test","mail = "+mail.getText().toString());
+            Log.i("test", "mail = " + mail.getText().toString());
 
             Toast.makeText(this, "Enregistrer", Toast.LENGTH_SHORT).show();
-        }
-        else
+        } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
     }
 
-    private boolean verifChamp(){
-        boolean champRemplie =  true;
-        if(this.mail.getText().toString().equals("")){
+    private boolean verifChamp() {
+        boolean champRemplie = true;
+        if (this.mail.getText().toString().equals("")) {
             this.mail.setError("Veuillez remplir ce champ");
             champRemplie = false;
         }
-        if(!this.mail.getText().toString().equals("")) {
+        if (!this.mail.getText().toString().equals("")) {
             if (!verifSyntax()) {
                 this.mail.setError("Syntax incorrecte");
                 champRemplie = false;
@@ -59,7 +60,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
         return champRemplie;
     }
 
-    private boolean verifSyntax(){
+    private boolean verifSyntax() {
         boolean syntaxCorrect = true;
         Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
         Matcher m = p.matcher(this.mail.getText().toString());
