@@ -2,6 +2,7 @@ package catchem.catchem2;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,7 +24,7 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        this.recupererMail();
+      //  this.recupererMail();
     }
 
     public void ajouterPersonne(final MainActivity context, String nom, String prenom) {
