@@ -25,7 +25,8 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        recupererMail();
+        this.recupererMail();
+
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -35,17 +36,19 @@ public class BDD {
         int i = 0;
         for (String unString : immatriculation) {
             i++;
-            user.put(KEY_PLAQUE+i, immatriculation[i-1]);
+            if (unString != null){
+                user.put(KEY_PLAQUE+i, unString);
+            }
         }
-        Log.i("test quentin", "je suis passer par la");
         db.collection("users").document().set(user);
     }
 
     public void setMailSignalement(String pmail) {
         Map<String, Object> mail = new HashMap<>();
         mail.put(KEY_Mail, pmail);
-        db.collection("mail").document().set(mail);
+        db.collection("mail").document("theMail").set(mail);
     }
+
 
     public String getMailSignalement(){
         return mailRecupere;
