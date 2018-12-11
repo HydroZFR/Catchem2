@@ -23,7 +23,7 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        this.recupererMail();
+       // this.recupererMail();
     }
 
     public void ajouterPersonne(final MainActivity context, String nom, String prenom) {
@@ -41,10 +41,11 @@ public class BDD {
 
     public String getMailSignalement(){
 
-       return mailRecupere;
+       //return mailRecupere;
+        return "hello";
     }
 
-    public void recupererMail(){
+   /* public void recupererMail(){
         db.collection("mail").document("theMail").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -52,6 +53,6 @@ public class BDD {
                 Log.i("test quentin", mailRecupere);
             }
         });
-        Log.i("test quentin", "passage 2 " + mailRecupere);
-    }
+        //Log.i("test quentin", "passage 2 " + mailRecupere);
+    }*/
 }
