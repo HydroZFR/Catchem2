@@ -1,7 +1,9 @@
 package catchem.catchem2;
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +25,7 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
+        recupererMail();
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -44,24 +47,22 @@ public class BDD {
         db.collection("mail").document().set(mail);
     }
 
-    public String getMailSignalement() throws InterruptedException {
-        final Thread t1 = new Thread() {
-            @Override
-            public void run() {
-                recupererMail();
-            }
-        };
-        t1.start();
-        t1.join();
+    public String getMailSignalement(){
         return mailRecupere;
     }
 
    public void recupererMail(){
-        db.collection("mail").document("theMail").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                mailRecupere = documentSnapshot.getString("mail");
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    mailRecupere = documentSnapshot.getString(KEY_Mail);
+                }
             }
         });
+    }
+
+    public void afficherLaRecherche(String nom, String prenom, LinearLayout affichage) {
+
     }
 }
