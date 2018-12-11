@@ -24,7 +24,6 @@ public class Menu_ModifierMail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifier_mail);
         mail = (EditText) findViewById(R.id.mail);
-        mail.setText(MainActivity.uneBDD.getMailSignalement());
         enregistrement = (Button) findViewById(R.id.enregistrer);
         enregistrement.setOnClickListener(new View.OnClickListener() {
             @Override
