@@ -56,14 +56,12 @@ public class BDD {
         return mailRecupere;
     }
 
-    public void recupererMail() {
+   public void recupererMail(){
         db.collection("mail").document("theMail").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 mailRecupere = documentSnapshot.getString("mail");
-                Log.i("test quentin", mailRecupere);
             }
         });
-        Log.i("test quentin", "passage 2 " + mailRecupere);
     }
 }

@@ -125,6 +125,7 @@
                     android:id="@+id/immatriculation"
                     android:layout_width="307dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
                     android:ems="10"
                     android:hint="ex : HH-888-HH"
                     android:inputType="textPersonName" />
@@ -132,8 +133,8 @@
                 <Button
                     android:id="@+id/ajouteImma"
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_weight="0.1"
                     android:background="@drawable/plus" />
             </LinearLayout>
 

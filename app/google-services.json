@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "382605864874-p3o34noavk9bq8f9iu0d6f84753hgjn0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "catchem.catchem2",
+            "certificate_hash": "9f5424b39e4dfe23a2f07a110855788268dd0320"
+          }
+        },
+        {
           "client_id": "382605864874-r68u4p2mhabhpfgf2fk16cqln5ivo91o.apps.googleusercontent.com",
           "client_type": 3
         }
