@@ -48,20 +48,22 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
     }
 
     public void ajouterImmatriculation() {
-        nouvelleImma = new EditText(this);
-        if (nouvelleImma.getParent() != null) {
-            nouvelleImma.getParent().clearChildFocus(nouvelleImma);
-            ViewGroup parentViexGroup = (ViewGroup) nouvelleImma.getParent();
-            if (parentViexGroup != null) {
-                parentViexGroup.removeView(nouvelleImma);
+        if (nbLigne == 0) {
+            nouvelleImma = new EditText(this);
+            if (nouvelleImma.getParent() != null) {
+                nouvelleImma.getParent().clearChildFocus(nouvelleImma);
+                ViewGroup parentViexGroup = (ViewGroup) nouvelleImma.getParent();
+                if (parentViexGroup != null) {
+                    parentViexGroup.removeView(nouvelleImma);
+                }
             }
+            linearyLayoutImma = (LinearLayout) findViewById(R.id.linearyLayoutImma);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            nouvelleImma.setLayoutParams(p);
+            nouvelleImma.setHint("ex : HH-888-HH");
+            nouvelleImma.setId(nbLigne);
+            linearyLayoutImma.addView(nouvelleImma);
         }
-        linearyLayoutImma = (LinearLayout) findViewById(R.id.linearyLayoutImma);
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        nouvelleImma.setLayoutParams(p);
-        nouvelleImma.setHint("ex : HH-888-HH");
-        nouvelleImma.setId(nbLigne);
-        linearyLayoutImma.addView(nouvelleImma);
         nbLigne++;
     }
 
@@ -73,17 +75,19 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
             String nom = this.nom.getText().toString();
             String prenom = this.prenom.getText().toString();
             String immatriculation = this.immatriculation1.getText().toString();
-            String immatriculation2 = this.nouvelleImma.getText().toString();
             Log.i("test", "nom = " + nom);
             Log.i("test", "prenom = " + prenom);
             Log.i("test", "Immatriculation = " + immatriculation);
-            Log.i("test", "Immatriculation2 = " + immatriculation2);
-
             String[] tabImmatriculation = new String[2];
             tabImmatriculation[0] = immatriculation;
-            tabImmatriculation[1] = immatriculation2;
+            if (this.nouvelleImma != null ){ //On vérifie si la personne a bien créer une deuxième imatriculation
+                if (this.nouvelleImma.getText().toString() == "") {
+                    String immatriculation2 = this.nouvelleImma.getText().toString();
+                    Log.i("test", "Immatriculation2 = " + immatriculation2);
+                    tabImmatriculation[1] = immatriculation2;
+                }
+            }
             MainActivity.uneBDD.ajouterPersonne(nom, prenom, tabImmatriculation);
-
             Toast.makeText(this, "Enregsitrer", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();

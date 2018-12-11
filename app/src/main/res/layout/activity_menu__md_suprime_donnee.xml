@@ -62,7 +62,9 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rechercher" />
+            android:backgroundTint="@color/colorButton"
+            android:text="Rechercher"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/textView11"

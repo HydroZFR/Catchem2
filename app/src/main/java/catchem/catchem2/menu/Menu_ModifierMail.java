@@ -24,6 +24,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifier_mail);
         mail = (EditText) findViewById(R.id.mail);
+        mail.setText(MainActivity.uneBDD.getMailSignalement());
         enregistrement = (Button) findViewById(R.id.enregistrer);
         enregistrement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +38,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
         if (this.verifChamp()) {
             String adresseMail = mail.getText().toString();
             Log.i("test", "mail = " + mail.getText().toString());
-
+            MainActivity.uneBDD.setMailSignalement(adresseMail);
             Toast.makeText(this, "Enregistrer", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
@@ -55,7 +56,6 @@ public class Menu_ModifierMail extends AppCompatActivity {
                 champRemplie = false;
             }
         }
-
         return champRemplie;
     }
 
