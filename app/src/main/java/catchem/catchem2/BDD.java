@@ -1,6 +1,7 @@
 package catchem.catchem2;
 
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -23,6 +24,7 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
+        this.recupererMail();
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -32,27 +34,20 @@ public class BDD {
         int i = 0;
         for (String unString : immatriculation) {
             i++;
-            user.put(KEY_PLAQUE+i, immatriculation[i-1]);
+            if (unString != null){
+                user.put(KEY_PLAQUE+i, unString);
+            }
         }
-        Log.i("test quentin", "je suis passer par la");
         db.collection("users").document().set(user);
     }
 
     public void setMailSignalement(String pmail) {
         Map<String, Object> mail = new HashMap<>();
         mail.put(KEY_Mail, pmail);
-        db.collection("mail").document().set(mail);
+        db.collection("mail").document("theMail").set(mail);
     }
 
-    public String getMailSignalement() throws InterruptedException {
-        final Thread t1 = new Thread() {
-            @Override
-            public void run() {
-                recupererMail();
-            }
-        };
-        t1.start();
-        t1.join();
+    public String getMailSignalement() {
         return mailRecupere;
     }
 
@@ -63,5 +58,9 @@ public class BDD {
                 mailRecupere = documentSnapshot.getString("mail");
             }
         });
+    }
+
+    public void recherche(String nom, String prenom, LinearLayout affichage){
+
     }
 }
