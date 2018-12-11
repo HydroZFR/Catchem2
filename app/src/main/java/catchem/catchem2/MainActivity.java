@@ -49,7 +49,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public void envoyer(View v) {
         String nom = editTextNom.getText().toString();
         String prenom = editTextPrenom.getText().toString();
-        uneBDD.ajouterPersonne(this, nom, prenom);
+        String[] immatriculation = new String[2];
+        immatriculation[0]= "Ab 275 PM";
+        immatriculation[1]= "HH 999 HH";
+        //uneBDD.ajouterPersonne("Pineau", "Quentin", immatriculation);
     }
 
     @Override

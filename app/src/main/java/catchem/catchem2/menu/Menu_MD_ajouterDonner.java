@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import catchem.catchem2.MainActivity;
 import catchem.catchem2.R;
 
 public class Menu_MD_ajouterDonner extends AppCompatActivity {
@@ -77,11 +78,12 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
             Log.i("test", "prenom = " + prenom);
             Log.i("test", "Immatriculation = " + immatriculation);
             Log.i("test", "Immatriculation2 = " + immatriculation2);
-        /*
-            ...
-            Ici on fait pas l'enregistrment dans la BDD nous
-            ...
-         */
+
+            String[] tabImmatriculation = new String[2];
+            tabImmatriculation[0] = immatriculation;
+            tabImmatriculation[1] = immatriculation2;
+            MainActivity.uneBDD.ajouterPersonne(nom, prenom, tabImmatriculation);
+
             Toast.makeText(this, "Enregsitrer", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
