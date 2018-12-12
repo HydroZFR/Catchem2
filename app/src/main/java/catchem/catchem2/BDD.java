@@ -34,6 +34,7 @@ public class BDD {
         super();
         db = FirebaseFirestore.getInstance();
         this.recupererMail();
+
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -56,19 +57,22 @@ public class BDD {
         db.collection("mail").document("theMail").set(mail);
     }
 
-    public String getMailSignalement() {
+
+    public String getMailSignalement(){
         return mailRecupere;
     }
 
    public void recupererMail(){
-        db.collection("mail").document("theMail").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                mailRecupere = documentSnapshot.getString("mail");
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    mailRecupere = documentSnapshot.getString(KEY_Mail);
+                }
             }
         });
     }
-
+  
     public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage){
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -91,8 +95,6 @@ public class BDD {
                 Log.e("ERREUR", "Problème recherche");
             }
         });
-
-    }
 
     public void popUp(Button unButton){
         unButton.setOnClickListener(new View.OnClickListener() {
