@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +78,7 @@ public class BDD {
     }
 
     public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage) {
+        affichage.removeAllViews();
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -86,7 +90,7 @@ public class BDD {
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
-                        popUp(unButton, affichage.getContext(), unDocument);
+                        popUp(unButton, affichage, unDocument);
                     }
                 }
             }
@@ -98,25 +102,42 @@ public class BDD {
         });
     }
 
-
-
-    public static void popUp(Button unButton, final Context context, final DocumentSnapshot unDocument) {
+    public void popUp(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
+        final Context context = affichage.getContext();
         final Dialog popUp = new Dialog(context);
         unButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popUp.setContentView(R.layout.popup_modifier_donnee);
-                EditText nom = (EditText) popUp.findViewById(R.id.EdittextNomPopup);
+                final EditText nom = (EditText) popUp.findViewById(R.id.editTextNomPopup);
                 nom.setText(unDocument.getString("nom"));
-                EditText prenom = (EditText) popUp.findViewById(R.id.editTextPrenomPopup);
+                final EditText prenom = (EditText) popUp.findViewById(R.id.editTextPrenomPopup);
                 prenom.setText(unDocument.getString("prenom"));
-                EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
+                final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
                 popUp.dismiss();
+               Button buttonValider =  popUp.findViewById(R.id.buttonValider);
+               buttonValider.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                       update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                       update(unDocument.getReference(), KEY_PLAQUE +"1", imma1.getText().toString());
+                     //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                       popUp.cancel();
+                       rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                       Toast.makeText(context,"Données sauvegardées", Toast.LENGTH_SHORT).show();
+                   }
+               });
                 popUp.show();
             }
         });
     }
 
+    public void update(DocumentReference documentRef, String key, String data) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, data);
+        documentRef.set(map, SetOptions.merge());
+    }
 
 }
