@@ -2,6 +2,7 @@ package catchem.catchem2;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,7 +34,6 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        this.recupererMail();
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -56,19 +56,18 @@ public class BDD {
         db.collection("mail").document("theMail").set(mail);
     }
 
-    public String getMailSignalement() {
-        return mailRecupere;
-    }
-
    public void recupererMail(){
-        db.collection("mail").document("theMail").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                mailRecupere = documentSnapshot.getString("mail");
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    mailRecupere = documentSnapshot.getString(KEY_Mail);
+                }
             }
         });
+        return mailRecupere;
     }
-
+  
     public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage){
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -92,13 +91,11 @@ public class BDD {
             }
         });
 
-    }
-
-    public void popUp(final Button unButton){
+    public void popUp(Button unButton){
         unButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
     }

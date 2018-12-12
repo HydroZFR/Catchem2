@@ -39,7 +39,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
             String adresseMail = mail.getText().toString();
             Log.i("test", "mail = " + mail.getText().toString());
             MainActivity.uneBDD.setMailSignalement(adresseMail);
-            Toast.makeText(this, "Enregistrer", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enregistré", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
     }
