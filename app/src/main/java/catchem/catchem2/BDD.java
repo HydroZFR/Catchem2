@@ -43,8 +43,8 @@ public class BDD {
         int i = 0;
         for (String unString : immatriculation) {
             i++;
-            if (unString != null){
-                user.put(KEY_PLAQUE+i, unString);
+            if (unString != null) {
+                user.put(KEY_PLAQUE + i, unString);
             }
         }
         db.collection("users").document().set(user);
@@ -56,7 +56,7 @@ public class BDD {
         db.collection("mail").document("theMail").set(mail);
     }
 
-   public void recupererMail(){
+    public String getMailSignalement() {
         db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -67,16 +67,16 @@ public class BDD {
         });
         return mailRecupere;
     }
-  
-    public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage){
+
+    public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage) {
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)){
-                        Log.i("test quentin",""+unDocument.getString("immatriculation1"));
+                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                        Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
@@ -91,7 +91,9 @@ public class BDD {
             }
         });
 
-    public void popUp(Button unButton){
+    }
+
+    public void popUp(Button unButton) {
         unButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
