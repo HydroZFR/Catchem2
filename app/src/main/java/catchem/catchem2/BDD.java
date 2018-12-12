@@ -35,9 +35,10 @@ public class BDD {
         int i = 0;
         for (String unString : immatriculation) {
             i++;
-            user.put(KEY_PLAQUE+i, immatriculation[i-1]);
+            if (unString != null){
+                user.put(KEY_PLAQUE+i, unString);
+            }
         }
-        Log.i("test quentin", "je suis passer par la");
         db.collection("users").document().set(user);
     }
 
@@ -47,7 +48,7 @@ public class BDD {
         db.collection("mail").document("theMail").set(mail);
     }
 
-   public String getMailSignalement(){
+   public void recupererMail(){
         db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
