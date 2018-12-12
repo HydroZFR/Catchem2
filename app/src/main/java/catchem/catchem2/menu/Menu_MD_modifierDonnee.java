@@ -1,5 +1,9 @@
 package catchem.catchem2.menu;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import catchem.catchem2.MainActivity;
 import catchem.catchem2.R;
@@ -38,4 +44,7 @@ public class Menu_MD_modifierDonnee extends AppCompatActivity {
     public void afficherLaRecherche(){
         MainActivity.uneBDD.rechercheModifier(editText_Nom.getText().toString(), editText_Prenom.getText().toString(), linearLayout_Affichage);
     }
+
+
+
 }

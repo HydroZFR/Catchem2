@@ -1,27 +1,33 @@
 package catchem.catchem2;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1beta1.Document;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import catchem.catchem2.menu.Menu;
+import catchem.catchem2.menu.Menu_MD_modifierDonnee;
+import catchem.catchem2.menu.Menu_ModifierDonnee;
+
 
 public class BDD {
     private final static String KEY_NOM = "nom";
@@ -80,7 +86,7 @@ public class BDD {
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
-                        popUp(unButton);
+                        popUp(unButton, affichage.getContext(), unDocument);
                     }
                 }
             }
@@ -90,15 +96,27 @@ public class BDD {
                 Log.e("ERREUR", "Problème recherche");
             }
         });
-
     }
 
-    public void popUp(Button unButton) {
+
+
+    public static void popUp(Button unButton, final Context context, final DocumentSnapshot unDocument) {
+        final Dialog popUp = new Dialog(context);
         unButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                popUp.setContentView(R.layout.popup_modifier_donnee);
+                EditText nom = (EditText) popUp.findViewById(R.id.EdittextNomPopup);
+                nom.setText(unDocument.getString("nom"));
+                EditText prenom = (EditText) popUp.findViewById(R.id.editTextPrenomPopup);
+                prenom.setText(unDocument.getString("prenom"));
+                EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
+                imma1.setText(unDocument.getString("immatriculation1"));
+                popUp.dismiss();
+                popUp.show();
             }
         });
     }
+
+
 }
