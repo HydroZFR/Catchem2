@@ -1,6 +1,7 @@
 package catchem.catchem2;
 
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +26,6 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        recupererMail();
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -44,14 +44,10 @@ public class BDD {
     public void setMailSignalement(String pmail) {
         Map<String, Object> mail = new HashMap<>();
         mail.put(KEY_Mail, pmail);
-        db.collection("mail").document().set(mail);
+        db.collection("mail").document("theMail").set(mail);
     }
 
-    public String getMailSignalement(){
-        return mailRecupere;
-    }
-
-   public void recupererMail(){
+   public String getMailSignalement(){
         db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -60,9 +56,10 @@ public class BDD {
                 }
             }
         });
+        return mailRecupere;
     }
 
-    public void afficherLaRecherche(String nom, String prenom, LinearLayout affichage) {
+    public void recherche(String nom, String prenom, LinearLayout affichage) {
 
     }
 }

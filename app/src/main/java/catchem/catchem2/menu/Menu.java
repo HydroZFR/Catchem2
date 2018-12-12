@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -55,6 +56,12 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
             }
 
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MainActivity.uneBDD.getMailSignalement(); // recuperer mail pour afficher instantanément
     }
 
     @Override
