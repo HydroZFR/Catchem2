@@ -2,6 +2,7 @@ package catchem.catchem2.menu;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +36,6 @@ public class Menu_MD_modifierDonnee extends AppCompatActivity {
     }
 
     public void afficherLaRecherche(){
-        MainActivity.uneBDD.recherche(editText_Nom.getText().toString(), editText_Prenom.getText().toString(), linearLayout_Affichage);
+        MainActivity.uneBDD.rechercheModifier(editText_Nom.getText().toString(), editText_Prenom.getText().toString(), linearLayout_Affichage);
     }
 }
