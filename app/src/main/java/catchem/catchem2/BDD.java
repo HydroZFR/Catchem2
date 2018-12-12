@@ -94,11 +94,11 @@ public class BDD {
 
     }
 
-    public void popUp(Button unButton){
+    public void popUp(final Button unButton){
         unButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                
             }
         });
     }
