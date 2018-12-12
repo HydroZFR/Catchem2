@@ -2,6 +2,7 @@ package catchem.catchem2;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,8 +34,6 @@ public class BDD {
     public BDD() {
         super();
         db = FirebaseFirestore.getInstance();
-        this.recupererMail();
-
     }
 
     public void ajouterPersonne(String nom, String prenom, String[] immatriculation) {
@@ -57,11 +56,6 @@ public class BDD {
         db.collection("mail").document("theMail").set(mail);
     }
 
-
-    public String getMailSignalement(){
-        return mailRecupere;
-    }
-
    public void recupererMail(){
         db.collection("mail").document("theMail").get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -71,6 +65,7 @@ public class BDD {
                 }
             }
         });
+        return mailRecupere;
     }
   
     public void rechercheModifier(final String nom, final String prenom, final LinearLayout affichage){
