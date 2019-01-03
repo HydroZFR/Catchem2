@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,8 +41,9 @@ public class BDD {
     private FirebaseFirestore db;
     private String mailRecupere;
 
-    public BDD() {
+    public BDD(MainActivity context) {
         super();
+        FirebaseApp.initializeApp(context);
         db = FirebaseFirestore.getInstance();
     }
 
@@ -123,7 +125,7 @@ public class BDD {
                        update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
                        update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
                        update(unDocument.getReference(), KEY_PLAQUE +"1", imma1.getText().toString());
-                     //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
                        popUp.cancel();
                        rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
                        Toast.makeText(context,"Données sauvegardées", Toast.LENGTH_SHORT).show();
