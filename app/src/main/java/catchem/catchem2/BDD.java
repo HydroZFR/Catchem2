@@ -109,18 +109,44 @@ public class BDD {
                 prenom.setText(unDocument.getString("prenom"));
                 final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
+                final EditText imma2 = (EditText) popUp.findViewById(R.id.editTextImma2Popup);
+                imma2.setText(unDocument.getString("immatriculation2"));
                 popUp.dismiss();
                 Button buttonValider = popUp.findViewById(R.id.buttonValider);
                 buttonValider.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                        update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
-                        update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
-                        //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                        popUp.cancel();
-                        rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
-                        Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+
+                        boolean champsCorrectes = true;
+                        if (nom.getText().toString().equals("")) {
+                            nom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (prenom.getText().toString().equals("")) {
+                            prenom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (!Utilitaire.syntaxImmatriculation(imma1) || imma1.getText().toString().equals("")) {
+                            imma1.setError("Veuillez remplir ce champ ou le corriger");
+                            champsCorrectes = false;
+                        }
+                        if (!imma2.getText().toString().equals("")) {
+                            if (!Utilitaire.syntaxImmatriculation(imma2)) {
+                                imma2.setError("Veuillez remplir correctement ce champ");
+                                champsCorrectes = false;
+                            }
+                        }
+                        if (champsCorrectes) {
+                            update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                            update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "2", imma2.getText().toString());
+                            popUp.cancel();
+                            rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                            Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Données non sauvegardées", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 popUp.show();
