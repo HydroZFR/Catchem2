@@ -79,10 +79,14 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
+                    String nomSaisie = Utilitaire.clearSyntax(nom);
+                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
+                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
+                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         Button unButton = new Button(affichage.getContext());
-                        unButton.setText(nom + " " + prenom);
+                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
                         affichage.addView(unButton);
                         popUpModifier(unButton, affichage, unDocument);
                     }
@@ -160,7 +164,7 @@ public class BDD {
         documentRef.set(map, SetOptions.merge());
     }
 
-    public void rechercheSuprimer(final String nom, final String prenom, final LinearLayout affichage) {
+    public void rechercheSupprimer(final String nom, final String prenom, final LinearLayout affichage) {
         affichage.removeAllViews();
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -168,29 +172,33 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (final DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
+                    String nomSaisie = Utilitaire.clearSyntax(nom);
+                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
+                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
+                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         final Button unButton = new Button(affichage.getContext());
-                        unButton.setText(nom + " " + prenom);
+                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
                         affichage.addView(unButton);
                         unButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(affichage.getContext());
-                                alertDialogSupressionPersonne.setTitle("Supression");
-                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment suprimer " + nom + " " + prenom + " ?");
+                                alertDialogSupressionPersonne.setTitle("Suppression");
+                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer " + nom + " " + prenom + " ?");
                                 alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         suprimer(unDocument);
-                                        rechercheSuprimer(nom, prenom, affichage);
+                                        rechercheSupprimer(nom, prenom, affichage);
                                     }
                                 });
                                 alertDialogSupressionPersonne.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
-                                        rechercheSuprimer(nom, prenom, affichage);
+                                        rechercheSupprimer(nom, prenom, affichage);
                                     }
                                 });
                                 alertDialogSupressionPersonne.show();

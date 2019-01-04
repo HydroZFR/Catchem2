@@ -15,4 +15,26 @@ public class Utilitaire {
             syntaxCorrect = false;
         return syntaxCorrect;
     }
+
+    public static String clearSyntax(String syntaxAClear) {
+        String syntaxClear = syntaxAClear.toLowerCase();
+        syntaxClear = syntaxClear.replaceAll("à","a");
+        syntaxClear = syntaxClear.replaceAll("â","a");
+        syntaxClear = syntaxClear.replaceAll("ä","a");
+        syntaxClear = syntaxClear.replaceAll("ç","c");
+        syntaxClear = syntaxClear.replaceAll("é","e");
+        syntaxClear = syntaxClear.replaceAll("è","e");
+        syntaxClear = syntaxClear.replaceAll("ê","e");
+        syntaxClear = syntaxClear.replaceAll("ë","e");
+        syntaxClear = syntaxClear.replaceAll("î","i");
+        syntaxClear = syntaxClear.replaceAll("ï","i");
+        syntaxClear = syntaxClear.replaceAll("ô","o");
+        syntaxClear = syntaxClear.replaceAll("ö","o");
+        syntaxClear = syntaxClear.replaceAll("ù","u");
+        syntaxClear = syntaxClear.replaceAll("û","u");
+        syntaxClear = syntaxClear.replaceAll("ü","u");
+        syntaxClear = syntaxClear.replaceAll("ÿ","y");
+        syntaxClear = syntaxClear.replaceAll("ñ","n");
+        return syntaxClear;
+    }
 }

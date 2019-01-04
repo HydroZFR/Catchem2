@@ -34,6 +34,6 @@ public class Menu_MD_suprimeDonnee extends AppCompatActivity {
     }
 
     private void afficherLaRecherche() {
-        MainActivity.uneBDD.rechercheSuprimer(editTextNom.getText().toString(), editTextPrenom.getText().toString(), linearLayoutAffichage);
+        MainActivity.uneBDD.rechercheSupprimer(editTextNom.getText().toString(), editTextPrenom.getText().toString(), linearLayoutAffichage);
     }
 }
