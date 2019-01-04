@@ -64,8 +64,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private Point windowSize;
     private ImageView didactView;
     private CountDownTimer countdown,countdown2;
+    private LinearLayout plateDidact, stateButtons, typePlace, validPlate;
+    private Button retour, suivant;
 
     public static final int requestPermissionID = 1;
+    public int state = 0;
     private boolean isTimeP1;
     private ImageView pictView;
 
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         display.getSize(windowSize);
         pictView = (ImageView) findViewById(R.id.pictView);
         pictView.setMinimumHeight(windowSize.y);
-        pictView.setY(-windowSize.y/2);
+        pictView.setY(-windowSize.y/4);
         pictView.setVisibility(View.GONE);
         plate1 = new Button(this);
         plate1.setTextSize(TypedValue.COMPLEX_UNIT_PX,windowSize.y/32);
@@ -95,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
                         pictView.setImageBitmap(bitmap);
+                        state = 1;
+                        switchState();
                     }
                 });
             }
@@ -111,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
                         pictView.setImageBitmap(bitmap);
+                        state = 1;
+                        switchState();
                     }
                 });
             }
@@ -125,6 +132,29 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         surfaceView.setMinimumHeight(windowSize.y);
         surfaceView.setY(-windowSize.y/2);
         underView.setMinimumHeight(windowSize.y/2);
+        plateDidact = findViewById(R.id.platedidact);
+        stateButtons = findViewById(R.id.statebuttons);
+        stateButtons.setVisibility(View.GONE);
+        typePlace = findViewById(R.id.typePlace);
+        typePlace.setVisibility(View.GONE);
+        validPlate = findViewById(R.id.validPlate);
+        validPlate.setVisibility(View.GONE);
+        retour = findViewById(R.id.retour);
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                state--;
+                switchState();
+            }
+        });
+        suivant = findViewById(R.id.suivant);
+        suivant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                state++;
+                switchState();
+            }
+        });
         startCameraSource();
         uneBDD = new BDD(this);
     }
@@ -352,6 +382,29 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             this.swipeUp();
         }
         return false;
+    }
+
+    public void switchState() {
+        switch(state) {
+            case 0:
+                plateDidact.setVisibility(View.VISIBLE);
+                stateButtons.setVisibility(View.GONE);
+                typePlace.setVisibility(View.GONE);
+                validPlate.setVisibility(View.GONE);
+                break;
+            case 1:
+                plateDidact.setVisibility(View.GONE);
+                stateButtons.setVisibility(View.VISIBLE);
+                typePlace.setVisibility(View.GONE);
+                validPlate.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                plateDidact.setVisibility(View.GONE);
+                stateButtons.setVisibility(View.VISIBLE);
+                typePlace.setVisibility(View.VISIBLE);
+                validPlate.setVisibility(View.GONE);
+                break;
+        }
     }
 
 
