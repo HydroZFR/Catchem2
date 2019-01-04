@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import catchem.catchem2.MainActivity;
 import catchem.catchem2.R;
+import catchem.catchem2.Utilitaire;
 
 public class Menu_MD_ajouterDonner extends AppCompatActivity {
 
@@ -108,29 +109,20 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
             champRemplie = false;
         }
         if (!this.immatriculation1.getText().toString().equals("")) {
-            if (!this.syntaxImmatriculation(this.immatriculation1)) {
+            if (!Utilitaire.syntaxImmatriculation(this.immatriculation1)) {
                 this.immatriculation1.setError("Syntax incorrecte");
                 champRemplie = false;
             }
         }
         if (this.nouvelleImma != null) {
             if(!this.nouvelleImma.getText().toString().equals("")) {
-                if (!this.syntaxImmatriculation(this.nouvelleImma)) {
+                if (!Utilitaire.syntaxImmatriculation(this.nouvelleImma)) {
                     this.nouvelleImma.setError("Syntax incorrecte");
                     champRemplie = false;
                 }
             }
         }
         return champRemplie;
-    }
-
-    public boolean syntaxImmatriculation(EditText immatriculation) {
-        boolean syntaxCorrect = true;
-        Pattern p = Pattern.compile("([A-Z]{2}[- ]+[0-9]{3}[- ]+[A-Z]{2})|([0-9]{3}[- ]+[A-Z]{3}[- ]+[0-9]{2})");
-        Matcher m = p.matcher(immatriculation.getText().toString());
-        if (!m.matches())
-            syntaxCorrect = false;
-        return syntaxCorrect;
     }
 
 }
