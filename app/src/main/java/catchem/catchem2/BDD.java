@@ -79,10 +79,14 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) || unDocument.getString("prenom").equals(prenom)) {
+                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
+                    String nomSaisie = Utilitaire.clearSyntax(nom);
+                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
+                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
+                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         Button unButton = new Button(affichage.getContext());
-                        unButton.setText(nom + " " + prenom);
+                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
                         affichage.addView(unButton);
                         popUpModifier(unButton, affichage, unDocument);
                     }
@@ -109,18 +113,44 @@ public class BDD {
                 prenom.setText(unDocument.getString("prenom"));
                 final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
+                final EditText imma2 = (EditText) popUp.findViewById(R.id.editTextImma2Popup);
+                imma2.setText(unDocument.getString("immatriculation2"));
                 popUp.dismiss();
                 Button buttonValider = popUp.findViewById(R.id.buttonValider);
                 buttonValider.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                        update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
-                        update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
-                        //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                        popUp.cancel();
-                        rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
-                        Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+
+                        boolean champsCorrectes = true;
+                        if (nom.getText().toString().equals("")) {
+                            nom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (prenom.getText().toString().equals("")) {
+                            prenom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (!Utilitaire.syntaxImmatriculation(imma1) || imma1.getText().toString().equals("")) {
+                            imma1.setError("Veuillez remplir ce champ ou le corriger");
+                            champsCorrectes = false;
+                        }
+                        if (!imma2.getText().toString().equals("")) {
+                            if (!Utilitaire.syntaxImmatriculation(imma2)) {
+                                imma2.setError("Veuillez remplir correctement ce champ");
+                                champsCorrectes = false;
+                            }
+                        }
+                        if (champsCorrectes) {
+                            update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                            update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "2", imma2.getText().toString());
+                            popUp.cancel();
+                            rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                            Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Données non sauvegardées", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 popUp.show();
@@ -134,7 +164,7 @@ public class BDD {
         documentRef.set(map, SetOptions.merge());
     }
 
-    public void rechercheSuprimer(final String nom, final String prenom, final LinearLayout affichage) {
+    public void rechercheSupprimer(final String nom, final String prenom, final LinearLayout affichage) {
         affichage.removeAllViews();
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -142,29 +172,33 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (final DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) || unDocument.getString("prenom").equals(prenom)) {
+                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
+                    String nomSaisie = Utilitaire.clearSyntax(nom);
+                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
+                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
+                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         final Button unButton = new Button(affichage.getContext());
-                        unButton.setText(nom + " " + prenom);
+                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
                         affichage.addView(unButton);
                         unButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(affichage.getContext());
-                                alertDialogSupressionPersonne.setTitle("Supression");
-                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment suprimer " + nom + " " + prenom + " ?");
+                                alertDialogSupressionPersonne.setTitle("Suppression");
+                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer " + nom + " " + prenom + " ?");
                                 alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         suprimer(unDocument);
-                                        rechercheSuprimer(nom, prenom, affichage);
+                                        rechercheSupprimer(nom, prenom, affichage);
                                     }
                                 });
                                 alertDialogSupressionPersonne.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
-                                        rechercheSuprimer(nom, prenom, affichage);
+                                        rechercheSupprimer(nom, prenom, affichage);
                                     }
                                 });
                                 alertDialogSupressionPersonne.show();
