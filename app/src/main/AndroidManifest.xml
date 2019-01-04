@@ -22,7 +22,6 @@
         <activity
             android:name=".menu.Menu_ModifierDonnee"
             android:label="Menu" />
-        <activity android:name=".menu.Menu_Historique" />
         <activity android:name=".menu.Menu_ModifierMail" />
         <activity
             android:name=".menu.Menu_MD_ajouterDonner"

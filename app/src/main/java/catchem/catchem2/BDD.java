@@ -1,12 +1,10 @@
 package catchem.catchem2;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import android.view.View;
@@ -26,10 +24,6 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import catchem.catchem2.menu.Menu;
-import catchem.catchem2.menu.Menu_MD_modifierDonnee;
-import catchem.catchem2.menu.Menu_ModifierDonnee;
 
 
 public class BDD {
@@ -90,7 +84,7 @@ public class BDD {
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
-                        popUp(unButton, affichage, unDocument);
+                        popUpModifier(unButton, affichage, unDocument);
                     }
                 }
             }
@@ -102,7 +96,7 @@ public class BDD {
         });
     }
 
-    public void popUp(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
+    public void popUpModifier(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
         final Context context = affichage.getContext();
         final Dialog popUp = new Dialog(context);
         unButton.setOnClickListener(new View.OnClickListener() {
@@ -116,19 +110,19 @@ public class BDD {
                 final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
                 popUp.dismiss();
-               Button buttonValider =  popUp.findViewById(R.id.buttonValider);
-               buttonValider.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                       update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
-                       update(unDocument.getReference(), KEY_PLAQUE +"1", imma1.getText().toString());
-                     //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                       popUp.cancel();
-                       rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
-                       Toast.makeText(context,"Données sauvegardées", Toast.LENGTH_SHORT).show();
-                   }
-               });
+                Button buttonValider = popUp.findViewById(R.id.buttonValider);
+                buttonValider.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                        update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                        update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
+                        //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                        popUp.cancel();
+                        rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                        Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 popUp.show();
             }
         });
@@ -138,6 +132,57 @@ public class BDD {
         Map<String, Object> map = new HashMap<>();
         map.put(key, data);
         documentRef.set(map, SetOptions.merge());
+    }
+
+    public void rechercheSuprimer(final String nom, final String prenom, final LinearLayout affichage) {
+        affichage.removeAllViews();
+        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> listDocuments;
+                listDocuments = queryDocumentSnapshots.getDocuments();
+                for (final DocumentSnapshot unDocument : listDocuments) {
+                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                        Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
+                        final Button unButton = new Button(affichage.getContext());
+                        unButton.setText(nom + " " + prenom);
+                        affichage.addView(unButton);
+                        unButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(affichage.getContext());
+                                alertDialogSupressionPersonne.setTitle("Supression");
+                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment suprimer " + nom + " " + prenom + " ?");
+                                alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        suprimer(unDocument);
+                                        rechercheSuprimer(nom, prenom, affichage);
+                                    }
+                                });
+                                alertDialogSupressionPersonne.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        rechercheSuprimer(nom, prenom, affichage);
+                                    }
+                                });
+                                alertDialogSupressionPersonne.show();
+                            }
+                        });
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("ERREUR", "Problème recherche");
+            }
+        });
+    }
+
+    public void suprimer(DocumentSnapshot unDocument){
+        db.collection("users").document(unDocument.getId()).delete();
     }
 
 }

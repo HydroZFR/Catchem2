@@ -18,7 +18,6 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
 
     private GestureDetectorCompat gestureDetector;
     private Button modifieDonne;
-    private Button historique;
     private Button modifieMail;
 
     @Override
@@ -32,16 +31,6 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Menu.this, Menu_ModifierDonnee.class);
-                startActivity(intent);
-            }
-
-        });
-
-        historique = (Button) findViewById(R.id.Historique);
-        historique.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Menu.this, Menu_Historique.class);
                 startActivity(intent);
             }
 
