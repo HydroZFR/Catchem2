@@ -79,7 +79,7 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                    if (unDocument.getString("nom").equals(nom) || unDocument.getString("prenom").equals(prenom)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
@@ -142,7 +142,7 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (final DocumentSnapshot unDocument : listDocuments) {
-                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
+                    if (unDocument.getString("nom").equals(nom) || unDocument.getString("prenom").equals(prenom)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         final Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
