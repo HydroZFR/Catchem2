@@ -387,18 +387,21 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public void switchState() {
         switch(state) {
             case 0:
+                underView.setMinimumHeight(windowSize.y/2);
                 plateDidact.setVisibility(View.VISIBLE);
                 stateButtons.setVisibility(View.GONE);
                 typePlace.setVisibility(View.GONE);
                 validPlate.setVisibility(View.GONE);
                 break;
             case 1:
+                underView.setMinimumHeight(windowSize.y/3);
                 plateDidact.setVisibility(View.GONE);
                 stateButtons.setVisibility(View.VISIBLE);
                 typePlace.setVisibility(View.GONE);
                 validPlate.setVisibility(View.VISIBLE);
                 break;
             case 2:
+                underView.setMinimumHeight(windowSize.y/3);
                 plateDidact.setVisibility(View.GONE);
                 stateButtons.setVisibility(View.VISIBLE);
                 typePlace.setVisibility(View.VISIBLE);
