@@ -90,7 +90,7 @@ public class BDD {
                         Button unButton = new Button(affichage.getContext());
                         unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
-                        popUp(unButton, affichage, unDocument);
+                        popUpModifier(unButton, affichage, unDocument);
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class BDD {
         });
     }
 
-    public void popUp(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
+    public void popUpModifier(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
         final Context context = affichage.getContext();
         final Dialog popUp = new Dialog(context);
         unButton.setOnClickListener(new View.OnClickListener() {
@@ -115,20 +115,45 @@ public class BDD {
                 prenom.setText(unDocument.getString("prenom"));
                 final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
+                final EditText imma2 = (EditText) popUp.findViewById(R.id.editTextImma2Popup);
+                imma2.setText(unDocument.getString("immatriculation2"));
                 popUp.dismiss();
-               Button buttonValider =  popUp.findViewById(R.id.buttonValider);
-               buttonValider.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                       update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
-                       update(unDocument.getReference(), KEY_PLAQUE +"1", imma1.getText().toString());
-                     //  update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                       popUp.cancel();
-                       rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
-                       Toast.makeText(context,"Données sauvegardées", Toast.LENGTH_SHORT).show();
-                   }
-               });
+                Button buttonValider = popUp.findViewById(R.id.buttonValider);
+                buttonValider.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean champsCorrectes = true;
+                        if (nom.getText().toString().equals("")) {
+                            nom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (prenom.getText().toString().equals("")) {
+                            prenom.setError("Veuillez remplir ce champ");
+                            champsCorrectes = false;
+                        }
+                        if (!Utilitaire.syntaxImmatriculation(imma1) || imma1.getText().toString().equals("")) {
+                            imma1.setError("Veuillez remplir ce champ ou le corriger");
+                            champsCorrectes = false;
+                        }
+                        if (!imma2.getText().toString().equals("")) {
+                            if (!Utilitaire.syntaxImmatriculation(imma2)) {
+                                imma2.setError("Veuillez remplir correctement ce champ");
+                                champsCorrectes = false;
+                            }
+                        }
+                        if (champsCorrectes) {
+                            update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                            update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
+                            update(unDocument.getReference(), KEY_PLAQUE + "2", imma2.getText().toString());
+                            popUp.cancel();
+                            rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                            Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Données non sauvegardées", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 popUp.show();
             }
         });
