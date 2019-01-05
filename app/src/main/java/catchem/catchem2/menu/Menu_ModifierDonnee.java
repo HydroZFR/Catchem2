@@ -111,7 +111,6 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
         }
         if (currentTab == 1) {
             tabHost.setCurrentTabByTag("supprimer");
-            tabHost.setAnimation(tabHost.getAnimation());
         }
     }
 }
