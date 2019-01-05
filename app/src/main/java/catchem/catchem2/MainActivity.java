@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +39,7 @@ import com.google.firebase.FirebaseApp;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private Point windowSize;
     private ImageView didactView;
     private CountDownTimer countdown,countdown2;
-    private LinearLayout plateDidact, stateButtons, typePlace, validPlate;
+    private LinearLayout plateDidact, stateButtons, typePlace, validPlate, infosPlate;
+    private EditText validEditPlate;
     private Button retour, suivant;
 
     public static final int requestPermissionID = 1;
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         pictView.setMinimumHeight(windowSize.y);
         pictView.setY(-windowSize.y/4);
         pictView.setVisibility(View.GONE);
+        validEditPlate = findViewById(R.id.validPlateEdit);
         plate1 = new Button(this);
         plate1.setTextSize(TypedValue.COMPLEX_UNIT_PX,windowSize.y/32);
         plate1.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
                         pictView.setImageBitmap(bitmap);
+                        validEditPlate.setText(plate1.getText());
                         state = 1;
                         switchState();
                     }
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
                         pictView.setImageBitmap(bitmap);
+                        validEditPlate.setText(plate2.getText());
                         state = 1;
                         switchState();
                     }
@@ -135,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         plateDidact = findViewById(R.id.platedidact);
         stateButtons = findViewById(R.id.statebuttons);
         stateButtons.setVisibility(View.GONE);
+        infosPlate = findViewById(R.id.infosPlate);
+        infosPlate.setVisibility(View.GONE);
         typePlace = findViewById(R.id.typePlace);
         typePlace.setVisibility(View.GONE);
         validPlate = findViewById(R.id.validPlate);
@@ -143,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                state--;
+                if(state>0)state--;
                 switchState();
             }
         });
@@ -151,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         suivant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                state++;
+                if(state<4)state++;
                 switchState();
             }
         });
@@ -392,6 +400,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 stateButtons.setVisibility(View.GONE);
                 typePlace.setVisibility(View.GONE);
                 validPlate.setVisibility(View.GONE);
+                surfaceView.setVisibility(View.VISIBLE);
+                pictView.setVisibility(View.GONE);
+                infosPlate.setVisibility(View.GONE);
                 break;
             case 1:
                 underView.setMinimumHeight(windowSize.y/3);
@@ -399,15 +410,39 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 stateButtons.setVisibility(View.VISIBLE);
                 typePlace.setVisibility(View.GONE);
                 validPlate.setVisibility(View.VISIBLE);
+                infosPlate.setVisibility(View.GONE);
                 break;
             case 2:
+                majInfosPlate();
+                underView.setMinimumHeight(windowSize.y/3);
+                plateDidact.setVisibility(View.GONE);
+                stateButtons.setVisibility(View.VISIBLE);
+                typePlace.setVisibility(View.GONE);
+                validPlate.setVisibility(View.GONE);
+                infosPlate.setVisibility(View.VISIBLE);
+                break;
+            case 3:
                 underView.setMinimumHeight(windowSize.y/3);
                 plateDidact.setVisibility(View.GONE);
                 stateButtons.setVisibility(View.VISIBLE);
                 typePlace.setVisibility(View.VISIBLE);
                 validPlate.setVisibility(View.GONE);
+                infosPlate.setVisibility(View.GONE);
+                break;
+            case 4:
+                //Vérifier problème cr"er pdf et meil si besoin
                 break;
         }
+    }
+
+    private void majInfosPlate() {
+        ((TextView)findViewById(R.id.plateTitle)).setText("Plaque : "+validEditPlate.getText().toString().replaceAll("[- ]+","-"));
+        ((TextView)findViewById(R.id.surname)).setText("Chargement...");
+        ((TextView)findViewById(R.id.firstname)).setText("Chargement...");
+        ((TextView)findViewById(R.id.depTitle)).setText("Chargement...");
+        uneBDD.recherchePlaque(validEditPlate.getText().toString().replaceAll("[- ]+"," "),
+                ((TextView)findViewById(R.id.surname)),
+                ((TextView)findViewById(R.id.firstname)), ((TextView)findViewById(R.id.depTitle)));
     }
 
 

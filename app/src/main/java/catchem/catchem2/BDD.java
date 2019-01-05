@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,7 @@ public class BDD {
     private final static String KEY_PRENOM = "prenom";
     private final static String KEY_PLAQUE = "immatriculation";
     private final static String KEY_Mail = "mail";
+    private List<String> infos = null;
     private FirebaseFirestore db;
     private String mailRecupere;
 
@@ -94,6 +97,59 @@ public class BDD {
                         affichage.addView(unButton);
                         popUp(unButton, affichage, unDocument);
                     }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("ERREUR", "Problème recherche");
+            }
+        });
+    }
+
+    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname, final TextView dep) {
+        Log.e("ERREUR","RECHERCHE"+plaque);
+        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> listDocuments;
+                listDocuments = queryDocumentSnapshots.getDocuments();
+                Log.e("LogTest","NBELEMS"+listDocuments.size());
+                boolean find=false;
+                for (DocumentSnapshot unDocument : listDocuments) {
+
+                    if(unDocument.getString("immatriculation1")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation1"));
+                        if (unDocument.getString("immatriculation1").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                    if(unDocument.getString("immatriculation2")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation2"));
+                        if (unDocument.getString("immatriculation2").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                    if(unDocument.getString("immatriculation3")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation3"));
+                        if (unDocument.getString("immatriculation3").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                }
+                if(!find) {
+                    surname.setText("Cette personne n'est pas de l'IUT");
+                    firstname.setText("");
+                    dep.setText("");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

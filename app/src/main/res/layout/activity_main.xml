@@ -60,6 +60,37 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/infosPlate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/plateTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/surname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/firstname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/depTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/typePlace"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,10 +98,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/typePlaceTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Où se situe la voiture ?" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -94,11 +125,14 @@
                         android:textOn="Handicapée" />
 
                     <ToggleButton
-                        android:id="@+id/toggleButton"
+                        android:id="@+id/plrsPlacesBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="ToggleButton" />
+                        android:checked="false"
+                        android:text="Plusieurs Places"
+                        android:textOff="Plusieurs Places"
+                        android:textOn="Plusieurs Places" />
                 </TableRow>
 
                 <TableRow
@@ -108,18 +142,24 @@
                     android:gravity="center_vertical|center_horizontal|center">
 
                     <ToggleButton
-                        android:id="@+id/toggleButton4"
+                        android:id="@+id/horsParkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="ToggleButton" />
+                        android:checked="false"
+                        android:text="Hors Parking"
+                        android:textOff="Hors Parking"
+                        android:textOn="Hors Parking" />
 
                     <ToggleButton
-                        android:id="@+id/toggleButton3"
+                        android:id="@+id/wgParkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="ToggleButton" />
+                        android:checked="false"
+                        android:text="Mauvais Parking"
+                        android:textOff="Mauvais Parking"
+                        android:textOn="Mauvais Parking" />
                 </TableRow>
 
             </TableLayout>
