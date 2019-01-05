@@ -1,29 +1,38 @@
 package catchem.catchem2;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import catchem.catchem2.menu.Menu;
+import catchem.catchem2.menu.Menu_MD_modifierDonnee;
+import catchem.catchem2.menu.Menu_ModifierDonnee;
 
 
 public class BDD {
@@ -31,11 +40,13 @@ public class BDD {
     private final static String KEY_PRENOM = "prenom";
     private final static String KEY_PLAQUE = "immatriculation";
     private final static String KEY_Mail = "mail";
+    private List<String> infos = null;
     private FirebaseFirestore db;
     private String mailRecupere;
 
-    public BDD() {
+    public BDD(MainActivity context) {
         super();
+        FirebaseApp.initializeApp(context);
         db = FirebaseFirestore.getInstance();
     }
 
@@ -79,16 +90,12 @@ public class BDD {
                 List<DocumentSnapshot> listDocuments;
                 listDocuments = queryDocumentSnapshots.getDocuments();
                 for (DocumentSnapshot unDocument : listDocuments) {
-                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
-                    String nomSaisie = Utilitaire.clearSyntax(nom);
-                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
-                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
-                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
+                    if (unDocument.getString("nom").equals(nom) && unDocument.getString("prenom").equals(prenom)) {
                         Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
                         Button unButton = new Button(affichage.getContext());
-                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
+                        unButton.setText(nom + " " + prenom);
                         affichage.addView(unButton);
-                        popUpModifier(unButton, affichage, unDocument);
+                        popUp(unButton, affichage, unDocument);
                     }
                 }
             }
@@ -100,7 +107,60 @@ public class BDD {
         });
     }
 
-    public void popUpModifier(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
+    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname, final TextView dep) {
+        Log.e("ERREUR","RECHERCHE"+plaque);
+        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> listDocuments;
+                listDocuments = queryDocumentSnapshots.getDocuments();
+                Log.e("LogTest","NBELEMS"+listDocuments.size());
+                boolean find=false;
+                for (DocumentSnapshot unDocument : listDocuments) {
+
+                    if(unDocument.getString("immatriculation1")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation1"));
+                        if (unDocument.getString("immatriculation1").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                    if(unDocument.getString("immatriculation2")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation2"));
+                        if (unDocument.getString("immatriculation2").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                    if(unDocument.getString("immatriculation3")!=null) {
+                        Log.e("LogTest", unDocument.getString("immatriculation3"));
+                        if (unDocument.getString("immatriculation3").equals(plaque)) {
+                            find=true;
+                            surname.setText("Nom : "+unDocument.getString("nom"));
+                            firstname.setText("Prénom : "+unDocument.getString("prenom"));
+                            dep.setText("test");
+                        }
+                    }
+                }
+                if(!find) {
+                    surname.setText("Cette personne n'est pas de l'IUT");
+                    firstname.setText("");
+                    dep.setText("");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("ERREUR", "Problème recherche");
+            }
+        });
+    }
+
+    public void popUp(Button unButton, final LinearLayout affichage, final DocumentSnapshot unDocument) {
         final Context context = affichage.getContext();
         final Dialog popUp = new Dialog(context);
         unButton.setOnClickListener(new View.OnClickListener() {
@@ -113,46 +173,20 @@ public class BDD {
                 prenom.setText(unDocument.getString("prenom"));
                 final EditText imma1 = (EditText) popUp.findViewById(R.id.editTextImma1Popup);
                 imma1.setText(unDocument.getString("immatriculation1"));
-                final EditText imma2 = (EditText) popUp.findViewById(R.id.editTextImma2Popup);
-                imma2.setText(unDocument.getString("immatriculation2"));
                 popUp.dismiss();
-                Button buttonValider = popUp.findViewById(R.id.buttonValider);
-                buttonValider.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        boolean champsCorrectes = true;
-                        if (nom.getText().toString().equals("")) {
-                            nom.setError("Veuillez remplir ce champ");
-                            champsCorrectes = false;
-                        }
-                        if (prenom.getText().toString().equals("")) {
-                            prenom.setError("Veuillez remplir ce champ");
-                            champsCorrectes = false;
-                        }
-                        if (!Utilitaire.syntaxImmatriculation(imma1) || imma1.getText().toString().equals("")) {
-                            imma1.setError("Veuillez remplir ce champ ou le corriger");
-                            champsCorrectes = false;
-                        }
-                        if (!imma2.getText().toString().equals("")) {
-                            if (!Utilitaire.syntaxImmatriculation(imma2)) {
-                                imma2.setError("Veuillez remplir correctement ce champ");
-                                champsCorrectes = false;
-                            }
-                        }
-                        if (champsCorrectes) {
-                            update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
-                            update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
-                            update(unDocument.getReference(), KEY_PLAQUE + "1", imma1.getText().toString());
-                            update(unDocument.getReference(), KEY_PLAQUE + "2", imma2.getText().toString());
-                            popUp.cancel();
-                            rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
-                            Toast.makeText(context, "Données sauvegardées", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Données non sauvegardées", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+               Button buttonValider =  popUp.findViewById(R.id.buttonValider);
+               buttonValider.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                       update(unDocument.getReference(), KEY_PRENOM, prenom.getText().toString());
+                       update(unDocument.getReference(), KEY_PLAQUE +"1", imma1.getText().toString());
+                       update(unDocument.getReference(), KEY_NOM, nom.getText().toString());
+                       popUp.cancel();
+                       rechercheModifier(nom.getText().toString(), prenom.getText().toString(), affichage);
+                       Toast.makeText(context,"Données sauvegardées", Toast.LENGTH_SHORT).show();
+                   }
+               });
                 popUp.show();
             }
         });
@@ -162,61 +196,6 @@ public class BDD {
         Map<String, Object> map = new HashMap<>();
         map.put(key, data);
         documentRef.set(map, SetOptions.merge());
-    }
-
-    public void rechercheSupprimer(final String nom, final String prenom, final LinearLayout affichage) {
-        affichage.removeAllViews();
-        db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> listDocuments;
-                listDocuments = queryDocumentSnapshots.getDocuments();
-                for (final DocumentSnapshot unDocument : listDocuments) {
-                    String nomBDD = Utilitaire.clearSyntax(unDocument.getString("nom"));
-                    String nomSaisie = Utilitaire.clearSyntax(nom);
-                    String prenomBDD = Utilitaire.clearSyntax(unDocument.getString("prenom"));
-                    String prenomSaisie = Utilitaire.clearSyntax(prenom);
-                    if (nomBDD.equals(nomSaisie) || prenomBDD.equals(prenomSaisie)) {
-                        Log.i("test quentin", "" + unDocument.getString("immatriculation1"));
-                        final Button unButton = new Button(affichage.getContext());
-                        unButton.setText(unDocument.getString("nom") + " " + unDocument.getString("prenom"));
-                        affichage.addView(unButton);
-                        unButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(affichage.getContext());
-                                alertDialogSupressionPersonne.setTitle("Suppression");
-                                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer " + nom + " " + prenom + " ?");
-                                alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        suprimer(unDocument);
-                                        rechercheSupprimer(nom, prenom, affichage);
-                                    }
-                                });
-                                alertDialogSupressionPersonne.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                        rechercheSupprimer(nom, prenom, affichage);
-                                    }
-                                });
-                                alertDialogSupressionPersonne.show();
-                            }
-                        });
-                    }
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("ERREUR", "Problème recherche");
-            }
-        });
-    }
-
-    public void suprimer(DocumentSnapshot unDocument){
-        db.collection("users").document(unDocument.getId()).delete();
     }
 
 }
