@@ -45,8 +45,6 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
                 .setIndicator("Suprimer")
                 .setContent(intent);
         tabHost.addTab(spec);
-
-
         tabHost.setCurrentTab(0);
     }
 
@@ -82,7 +80,6 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
 
     }
 
-
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         if (e1.getX() < e2.getX()) {
@@ -91,7 +88,6 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
         else this.swipeRight();
         return false;
     }
-
 
     public void swipeLeft(){
         int currentTab = tabHost.getCurrentTab();
