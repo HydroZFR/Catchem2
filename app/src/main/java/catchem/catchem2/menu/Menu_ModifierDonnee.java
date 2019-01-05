@@ -25,8 +25,6 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
         setContentView(R.layout.activity_modifier_donnee);
 
         gestureDetector = new GestureDetectorCompat(this, this);
-
-        Resources res = getResources();
         tabHost = getTabHost();
         Intent intent;
 
