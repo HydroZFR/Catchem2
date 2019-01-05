@@ -25,25 +25,23 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
         setContentView(R.layout.activity_modifier_donnee);
 
         gestureDetector = new GestureDetectorCompat(this, this);
-
-        Resources res = getResources();
         tabHost = getTabHost();
         Intent intent;
 
         intent = new Intent().setClass(this, Menu_MD_ajouterDonner.class);
-        spec = tabHost.newTabSpec("buildings")
+        spec = tabHost.newTabSpec("ajouter")
                 .setIndicator("Ajouter")
                 .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, Menu_MD_modifierDonnee.class);
-        spec = tabHost.newTabSpec("research")
+        spec = tabHost.newTabSpec("modifier")
                 .setIndicator("Modifier")
                 .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, Menu_MD_suprimeDonnee.class);
-        spec = tabHost.newTabSpec("research")
+        spec = tabHost.newTabSpec("supprimer")
                 .setIndicator("Suprimer")
                 .setContent(intent);
         tabHost.addTab(spec);
@@ -87,48 +85,32 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-     /*   if (e1.getX() < e2.getX()) {
+        if (e1.getX() < e2.getX()) {
             this.swipeLeft();
         }
-        else this.swipeRight();*/
+        else this.swipeRight();
         return false;
     }
 
 
-  /*  public void swipeLeft(){
+    public void swipeLeft(){
         int currentTab = tabHost.getCurrentTab();
         Log.e("Swipe", currentTab + "");
         if (currentTab == 1) {
-           Intent intent = new Intent().setClass(this, Menu_MD_ajouterDonner.class);
-            spec = tabHost.newTabSpec("research")
-                    .setIndicator("Suprimer")
-                    .setContent(intent);
-            tabHost.addTab(spec);
+            tabHost.setCurrentTabByTag("ajouter");
         }
         if (currentTab == 2) {
-            Intent intent = new Intent().setClass(this, Menu_MD_modifierDonnee.class);
-            spec = tabHost.newTabSpec("research")
-                    .setIndicator("Suprimer")
-                    .setContent(intent);
-            tabHost.addTab(spec);
+            tabHost.setCurrentTabByTag("modifier");
         }
     }
 
     public void swipeRight(){
         int currentTab = tabHost.getCurrentTab();
         if (currentTab == 0) {
-            Intent intent = new Intent().setClass(this, Menu_MD_modifierDonnee.class);
-            spec = tabHost.newTabSpec("research")
-                    .setIndicator("Suprimer")
-                    .setContent(intent);
-            tabHost.addTab(spec);
+            tabHost.setCurrentTabByTag("modifier");
         }
         if (currentTab == 1) {
-            Intent intent = new Intent().setClass(this, Menu_MD_suprimeDonnee.class);
-            spec = tabHost.newTabSpec("research")
-                    .setIndicator("Suprimer")
-                    .setContent(intent);
-            tabHost.addTab(spec);
+            tabHost.setCurrentTabByTag("supprimer");
         }
-    }*/
+    }
 }
