@@ -54,7 +54,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import catchem.catchem2.PDF.Pdf;
 import catchem.catchem2.menu.Menu;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
@@ -464,9 +463,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 //                    e.printStackTrace();
 //                }
                 // new Pdf(surn,firn,plat);
-                Pdf pdf = new Pdf();
                 try {
-                    pdf.createPDF(surn, firn, plaque);
+                  new Pdf(surn, firn, plaque, this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (DocumentException e) {
