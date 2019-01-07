@@ -35,7 +35,6 @@ import java.util.Date;
 public class Pdf extends Activity {
 
 
-
     boolean repDejaExistant = false;
     BaseColor couleurIUT = new BaseColor(226, 0, 21); // or red, green, blue, alpha
     BaseColor black = new BaseColor(0, 0, 0); // or red, green, blue, alpha
@@ -76,16 +75,17 @@ public class Pdf extends Activity {
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
         doc.open();
 
-       /* InputStream inputStream = context.getAssets().open("deuxlogos.jpg");
+     //   InputStream inputStream = context.getAssets().open("deuxlogos.jpg");
 
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.deuxlogos);
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
 
         //Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
         Image deuxLogos = Image.getInstance(outputStream.toByteArray());
+        deuxLogos.scalePercent(2);
         deuxLogos.setAbsolutePosition(0, 750);
-        doc.add(deuxLogos);*/
+        doc.add(deuxLogos);
 
         PdfContentByte contentByte = writer.getDirectContent();
         Rectangle rectangle = new Rectangle(0, doc.getPageSize().getHeight() - 100, doc.getPageSize().getWidth(), doc.getPageSize().getHeight() - 102);
@@ -107,17 +107,25 @@ public class Pdf extends Activity {
         paragraph1.setAlignment(Element.ALIGN_CENTER);
         doc.add(paragraph1);
 
+        Bitmap bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.vehicule);
+        ByteArrayOutputStream outputStream1 = new ByteArrayOutputStream();
+        bitmap1.compress(Bitmap.CompressFormat.PNG, 100, outputStream1);
+        Image imageVehicule = Image.getInstance(outputStream1.toByteArray());
 
-
-        /*imageVehicule.setAbsolutePosition(30, 180);
-        imageVehicule.scalePercent(70);
+        imageVehicule.setAbsolutePosition(30, 200);
+        imageVehicule.scalePercent(30);
         doc.add(imageVehicule);
 
-        localisationMaps.setAbsolutePosition(doc.getPageSize().getWidth() / 2, 180);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.maps);
+        ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
+        bitmap2.compress(Bitmap.CompressFormat.PNG, 100, outputStream2);
+        Image localisationMaps = Image.getInstance(outputStream2.toByteArray());
+
+        localisationMaps.setAbsolutePosition(doc.getPageSize().getWidth() / 2, 200);
         localisationMaps.setAlignment(Element.ALIGN_RIGHT);
-        localisationMaps.scalePercent(70);
+        localisationMaps.scalePercent(30);
         doc.add(localisationMaps);
-*/
+
 
         Rectangle rectangle3 = new Rectangle(0, 25, doc.getPageSize().getWidth(), 82);
         rectangle3.setBackgroundColor(grey);
@@ -134,16 +142,27 @@ public class Pdf extends Activity {
 
     }
 
-}
 
+    public Pdf(String nom, String prenom, String plaque, Image imageVehicule, Image localisationMaps) throws IOException, DocumentException {
 
+        String outpath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM";
+        File sdcard = new File(outpath1);
+        String[] contenuSdCard = sdcard.list();
+        int i = 0;
+        while (i < contenuSdCard.length && !repDejaExistant) {
+            if (contenuSdCard[i].compareTo("PDF") == 0)
+                repDejaExistant = true;
+            i++;
+        }
+        File rep = new File(outpath1 + "/PDF");
+        if (!repDejaExistant)
+            rep.mkdirs();
 
- /* public void createPDF(String nom, String prenom, String plaque, Image imageVehicule, Image localisationMaps) throws IOException, DocumentException {
         Document doc = new Document();
 
         String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + plaque + recupererDate() + ".pdf";
         // String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + numero + ".pdf";
-        numero++;
+
 
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
         doc.open();
@@ -193,4 +212,5 @@ public class Pdf extends Activity {
         doc.close();
 
 
-    }*/
+    }
+}
