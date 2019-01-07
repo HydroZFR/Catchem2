@@ -464,6 +464,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 //                }
                 // new Pdf(surn,firn,plat);
                 try {
+
                   new Pdf(surn, firn, plaque, this);
                 } catch (IOException e) {
                     e.printStackTrace();
