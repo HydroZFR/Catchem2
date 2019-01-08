@@ -407,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     e.printStackTrace();
                 }
                 try {
-                    new Pdf(surn, firn, plaque, this);
+                    new Pdf(surn, firn, plaque, genererListeInfraction(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (DocumentException e) {
@@ -417,6 +417,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 break;
         }
     }
+
+
 
     private void envoyerMail(String nom, String prenom, String plaque) {
         String filename = "DCIM/PDF/"+plaque+".pdf";
@@ -521,5 +523,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+    }
+
+    private String genererListeInfraction() {
+        String liste ="";
+        if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
+        if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
+        if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
+
+        return liste;
+
     }
 }
