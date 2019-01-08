@@ -52,7 +52,7 @@ public class Pdf extends Activity {
 
     MainActivity context;
 
-    public Pdf(String nom, String prenom, String plaque, String infractions, MainActivity context) throws IOException, DocumentException {
+    public Pdf(String nom, String prenom, String plaque, String infractions, int nbSautLigne, MainActivity context) throws IOException, DocumentException {
 
 
         this.context = context;
@@ -105,11 +105,15 @@ public class Pdf extends Activity {
         doc.add(new Paragraph(("\n         - Plaque d'immatriculation     : " + plaque), blackFont));
         doc.add(new Paragraph("\n         - Date de l'infraction               : " + recupererDate(), blackFont));
         doc.add(new Paragraph("\n         - Liste de ou des infractions  : " + infractions, blackFont));
-        doc.add(new Paragraph("\n\nMerci de faire le nécéssaire afin de rétablir l'ordre au sein du parking.", blackFont));
+        doc.add(new Paragraph("\nMerci de faire le nécéssaire afin de rétablir l'ordre au sein du parking.", blackFont));
         doc.add(new Paragraph("Cordialement.", blackFont));
-        Paragraph paragraph1 = new Paragraph("\n\n\n\n\n\n\n\n  \n\n\n Ce message est un message automatique généré par l'application Catch'em.\n Merci de ne pas y répondre.", smallBold);
-        paragraph1.setAlignment(Element.ALIGN_CENTER);
-        doc.add(paragraph1);
+
+            Paragraph paragraph1 = new Paragraph("");
+            paragraph1 = new Paragraph("\n\n\n\n\n\n\n\n\n  \n\n\n Ce message est un message automatique généré par l'application Catch'em.\n Merci de ne pas y répondre.", smallBold);
+            paragraph1.setAlignment(Element.ALIGN_CENTER);
+            doc.add(paragraph1);
+
+
 
 
 
@@ -129,7 +133,7 @@ public class Pdf extends Activity {
         doc.add(photoVoiture);
 
 
-        Rectangle rectangle3 = new Rectangle(0, 25, doc.getPageSize().getWidth(), 82);
+        Rectangle rectangle3 = new Rectangle(0, 25, doc.getPageSize().getWidth(), 102);
         rectangle3.setBackgroundColor(grey);
         contentByte.rectangle(rectangle3);
 

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public static final int requestPermissionID = 1;
     public int state = 0;
     private boolean isTimeP1;
+    int x =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -403,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     e.printStackTrace();
                 }
                 try {
-                    new Pdf(surn, firn, plaque, genererListeInfraction(), this);
+                    new Pdf(surn, firn, plaque, genererListeInfraction(), nbSautLigne(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (DocumentException e) {
@@ -427,9 +428,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
         if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
         if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
-
         return liste;
-
+    }
+    private int nbSautLigne() {
+        if (handi.isChecked()) x+=1;
+        if (plrs.isChecked()) x+=1;
+        if (hors.isChecked())x+=1;
+        return x;
     }
 
     private void majInfosPlate() {
