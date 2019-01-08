@@ -107,7 +107,7 @@ public class BDD {
         });
     }
 
-    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname, final TextView dep) {
+    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname) {
         Log.e("ERREUR","RECHERCHE"+plaque);
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -124,7 +124,6 @@ public class BDD {
                             find=true;
                             surname.setText("Nom : "+unDocument.getString("nom"));
                             firstname.setText("Prénom : "+unDocument.getString("prenom"));
-                            dep.setText("test");
                         }
                     }
                     if(unDocument.getString("immatriculation2")!=null) {
@@ -133,7 +132,6 @@ public class BDD {
                             find=true;
                             surname.setText("Nom : "+unDocument.getString("nom"));
                             firstname.setText("Prénom : "+unDocument.getString("prenom"));
-                            dep.setText("test");
                         }
                     }
                     if(unDocument.getString("immatriculation3")!=null) {
@@ -142,14 +140,12 @@ public class BDD {
                             find=true;
                             surname.setText("Nom : "+unDocument.getString("nom"));
                             firstname.setText("Prénom : "+unDocument.getString("prenom"));
-                            dep.setText("test");
                         }
                     }
                 }
                 if(!find) {
                     surname.setText("Cette personne n'est pas de l'IUT");
                     firstname.setText("");
-                    dep.setText("");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
