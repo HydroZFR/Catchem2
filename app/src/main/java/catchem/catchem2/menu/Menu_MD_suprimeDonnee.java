@@ -25,7 +25,6 @@ public class Menu_MD_suprimeDonnee extends AppCompatActivity {
         editTextPrenom = findViewById(R.id.editText_Prenom);
         buttonRechercher = findViewById(R.id.button_Rechercher);
         linearLayoutAffichage = findViewById(R.id.linearLayout_Affichage);
-
         buttonRechercher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +34,6 @@ public class Menu_MD_suprimeDonnee extends AppCompatActivity {
     }
 
     private void afficherLaRecherche() {
-        MainActivity.uneBDD.rechercheModifier(editTextNom.getText().toString(), editTextPrenom.getText().toString(), linearLayoutAffichage);
+        MainActivity.uneBDD.rechercheSupprimer(editTextNom.getText().toString(), editTextPrenom.getText().toString(), linearLayoutAffichage);
     }
 }
