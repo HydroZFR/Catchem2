@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 String surn = ((TextView) findViewById(R.id.surname)).getText().toString(),
                         firn = ((TextView) findViewById(R.id.firstname)).getText().toString(),
                         plaque = validEditPlate.getText().toString();
-                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/imageTmp.png";
+                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/"+plaque+".png";
                 FileOutputStream out = null;
                 try {
                     out = new FileOutputStream(new File(outpath));
