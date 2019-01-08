@@ -156,20 +156,6 @@
 
                         android:textOn="Hors Parking" />
 
-                    <ToggleButton
-                        android:id="@+id/wgParkBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10px"
-                        android:layout_weight="1"
-                        android:background="@color/colorPrimaryDark"
-                        android:checked="false"
-                        android:text="Mauvais Parking"
-                        android:textColor="@android:color/white"
-                        android:textOff="Mauvais Parking"
-
-
-                        android:textOn="Mauvais Parking" />
                 </TableRow>
 
             </TableLayout>

@@ -46,7 +46,7 @@ public class BDD {
     private FirebaseFirestore db;
     private String mailRecupere;
 
-    public BDD(MainActivity context) {
+    public BDD(Context context) {
         super();
         FirebaseApp.initializeApp(context);
         db = FirebaseFirestore.getInstance();
@@ -170,7 +170,7 @@ public class BDD {
         });
     }
 
-    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname) {
+    public void recherchePlaque(final String plaque, final TextView surname, final TextView firstname, final LinearLayout buttons) {
         db.collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -183,6 +183,7 @@ public class BDD {
                             find=true;
                             surname.setText(unDocument.getString(KEY_NOM));
                             firstname.setText(unDocument.getString(KEY_PRENOM));
+                            buttons.setVisibility(View.VISIBLE);
                         }
                     }
                     if(unDocument.getString(KEY_PLAQUE + "2")!=null) {
@@ -190,12 +191,14 @@ public class BDD {
                             find=true;
                             surname.setText(unDocument.getString(KEY_NOM));
                             firstname.setText(unDocument.getString(KEY_PRENOM));
+                            buttons.setVisibility(View.VISIBLE);
                         }
                     }
                 }
                 if(!find) {
                     surname.setText("Cette personne n'est pas de l'IUT");
                     firstname.setText("");
+                    buttons.setVisibility(View.VISIBLE);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
