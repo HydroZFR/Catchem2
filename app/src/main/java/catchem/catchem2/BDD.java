@@ -181,15 +181,15 @@ public class BDD {
                     if(unDocument.getString(KEY_PLAQUE + "1")!=null) {
                         if (unDocument.getString(KEY_PLAQUE + "1").equals(plaque)) {
                             find=true;
-                            surname.setText("Nom : "+unDocument.getString(KEY_NOM));
-                            firstname.setText("Prénom : "+unDocument.getString(KEY_PRENOM));
+                            surname.setText(unDocument.getString(KEY_NOM));
+                            firstname.setText(unDocument.getString(KEY_PRENOM));
                         }
                     }
                     if(unDocument.getString(KEY_PLAQUE + "2")!=null) {
                         if (unDocument.getString(KEY_PLAQUE + "2").equals(plaque)) {
                             find=true;
-                            surname.setText("Nom : "+unDocument.getString(KEY_NOM));
-                            firstname.setText("Prénom : "+unDocument.getString(KEY_PRENOM));
+                            surname.setText(unDocument.getString(KEY_NOM));
+                            firstname.setText(unDocument.getString(KEY_PRENOM));
                         }
                     }
                 }

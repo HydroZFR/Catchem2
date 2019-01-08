@@ -3,6 +3,7 @@ package catchem.catchem2;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private Button retour, suivant;
     private ImageView pictView;
     private Bitmap savePict;
+    private String nom, prenom;
+    private ToggleButton handi, plrs, hors, mauvais;
 
     public static final int requestPermissionID = 1;
     public int state = 0;
@@ -110,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         validPlate = findViewById(R.id.validPlate);
         retour = findViewById(R.id.retour);
         suivant = findViewById(R.id.suivant);
+        handi = findViewById(R.id.handiBtn);
+        plrs = findViewById(R.id.plrsPlacesBtn);
+        hors = findViewById(R.id.horsParkBtn);
+        mauvais = findViewById(R.id.wgParkBtn);
         //==--------== Fin de récupération des views ==--------==
         //============ Positionnement des views ============
         pictView.setMinimumHeight(windowSize.y);
@@ -163,6 +171,42 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             public void onClick(View v) {
                 if(state<4)state++;
                 switchState();
+            }
+        });
+        handi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(handi.isChecked())
+                    handi.setBackgroundColor(getResources().getColor(R.color.colorAccent, getTheme()));
+                else
+                    handi.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
+            }
+        });
+        plrs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(plrs.isChecked())
+                    plrs.setBackgroundColor(getResources().getColor(R.color.colorAccent, getTheme()));
+                else
+                    plrs.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
+            }
+        });
+        hors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hors.isChecked())
+                    hors.setBackgroundColor(getResources().getColor(R.color.colorAccent, getTheme()));
+                else
+                    hors.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
+            }
+        });
+        mauvais.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mauvais.isChecked())
+                    mauvais.setBackgroundColor(getResources().getColor(R.color.colorAccent, getTheme()));
+                else
+                    mauvais.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
             }
         });
             //==**== Fin ==**==
@@ -272,11 +316,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         cameraSource.takePicture(null, new CameraSource.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                Log.e("LogTest","BITS "+bitmap.getByteCount());
+                savePict = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Log.e("LogTest","BITS "+savePict.getByteCount());
                 surfaceView.setVisibility(View.GONE);
                 pictView.setVisibility(View.VISIBLE);
-                pictView.setImageBitmap(bitmap);
+                pictView.setImageBitmap(savePict);
                 validEditPlate.setText(plate.getText());
                 state = 1;
                 switchState();
@@ -314,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     public void switchState() {
-        if(state<3) {
+        if(state<4) {
             plateDidact.setVisibility(View.GONE);
             stateButtons.setVisibility(View.GONE);
             typePlace.setVisibility(View.GONE);
@@ -350,12 +394,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 String surn = ((TextView) findViewById(R.id.surname)).getText().toString(),
                         firn = ((TextView) findViewById(R.id.firstname)).getText().toString(),
                         plaque = validEditPlate.getText().toString();
-                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/imageTmp.png";
+                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/"+plaque+".png";
                 FileOutputStream out = null;
                 try {
                     out = new FileOutputStream(new File(outpath));
-                    Bitmap bitmap = pictView.getDrawingCache();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    savePict.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     out.flush();
                     out.close();
                 } catch (FileNotFoundException e) {
@@ -370,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 } catch (DocumentException e) {
                     e.printStackTrace();
                 }
-                envoyerMail(plaque);
+                envoyerMail(plaque,nom,prenom);
                 break;
         }
     }
@@ -411,12 +454,21 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     private void majInfosPlate() {
+        TextView first = ((TextView)findViewById(R.id.firstname)),surn = ((TextView)findViewById(R.id.surname));
         ((TextView)findViewById(R.id.plateTitle)).setText("Plaque : "+validEditPlate.getText().toString().replaceAll("[- ]+","-"));
         ((TextView)findViewById(R.id.surname)).setText("Chargement...");
         ((TextView)findViewById(R.id.firstname)).setText("Chargement...");
         uneBDD.recherchePlaque(validEditPlate.getText().toString().replaceAll("[- ]+"," "),
-                ((TextView)findViewById(R.id.surname)),
-                ((TextView)findViewById(R.id.firstname)));
+                surn, first);
+        if(first.getText().equals("")) {
+            nom = "???";
+            prenom = "???";
+        } else {
+            nom = first.getText().toString();
+            prenom = surn.getText().toString();
+        }
+        first.setText("Prénom : "+first.getText());
+        surn.setText("Nom : "+surn.getText());
     }
 
     @Override
