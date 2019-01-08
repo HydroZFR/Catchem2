@@ -42,7 +42,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorButton"
-            android:text="Modifier les données"
+            android:text="Ajouter/Modifier les données"
             android:textColor="@android:color/background_light"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent" />

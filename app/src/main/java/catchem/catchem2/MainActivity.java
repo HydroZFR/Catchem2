@@ -6,14 +6,17 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -28,16 +31,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.FirebaseApp;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+//import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +60,13 @@ import catchem.catchem2.menu.Menu;
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private GestureDetectorCompat gestureDetector;
+    private EditText editTextNom;
+    private EditText editTextPrenom;
+    private Button buttonEnvoyer;
+    //    private final static String KEY_NOM = "nom";
+//    private final static String KEY_PRENOM = "prenom";
+//    private final static String KEY_PLAQUE = "plaque";
+//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static BDD uneBDD;
 
     private CameraSource cameraSource;
@@ -60,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private EditText validEditPlate;
     private Button retour, suivant;
     private ImageView pictView;
+    private Bitmap savePict;
 
     public static final int requestPermissionID = 1;
     public int state = 0;
@@ -353,8 +375,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
     }
 
-    private void envoyerMail(String plaque) {
-        // String filename = "DCIM/PDF/1.pdf";
+    private void envoyerMail(String nom, String prenom, String plaque) {
         String filename = "DCIM/PDF/"+plaque+".pdf";
         File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
         // Uri path = Uri.fromFile(filelocation);
@@ -370,6 +391,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
 // set the type to 'email'
         emailIntent.setType("vnd.android.cursor.dir/email");
+       if(nom.length()<20){
+           String emailEtudiant = prenom+"."+nom+".etu@univ-lemans.fr";
+           Log.i("azerty", emailEtudiant);
+           String mail[] = {uneBDD.getMailSignalement(), emailEtudiant};
+       }else{
+           String mail[] = {uneBDD.getMailSignalement()};
+       }
+
         String mail[] = {uneBDD.getMailSignalement()};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
 // the attachment
