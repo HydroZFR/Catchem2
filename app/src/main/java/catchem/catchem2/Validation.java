@@ -1,12 +1,15 @@
 package catchem.catchem2;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,17 +19,66 @@ public class Validation extends AppCompatActivity {
 
     String plaque, nom, prenom;
     BDD uneBDD;
+    boolean handi,plrs,hors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
-        ImageView valid = findViewById(R.id.viewvalid);
-        TextView view = findViewById(R.id.isvalid);
+        ImageView view = findViewById(R.id.viewvalid);
+        //============ Récupération de la taille de l'écran ============
+        Display display = getWindowManager().getDefaultDisplay();
+        Point windowSize = new Point();
+        display.getSize(windowSize);
+        //==--------== Fin de récupération de la taille de l'écran ==--------==
+        TextView valid = findViewById(R.id.isvalid);
         plaque = getIntent().getStringExtra("plaque");
         nom = getIntent().getStringExtra("nom");
         prenom = getIntent().getStringExtra("prenom");
+        handi = getIntent().getBooleanExtra("handi",false);
+        plrs = getIntent().getBooleanExtra("plrs",false);
+        hors = getIntent().getBooleanExtra("hors",false);
+        Log.e("LogTest","n"+nom);
+        Log.e("LogTest","p"+prenom);
+        Log.e("LogTest","p"+plaque);
         uneBDD = new BDD(this);
+        if(handi || plrs || hors || nom.equals("???")) {
+            view.setImageResource(R.drawable.invalide);
+            valid.setText("La personne est mal garée un mail\nva être envoyé veuillez patienter ...");
+        } else
+            valid.setText("La personne est bien garée\nretour au menu ...");
+        new CountDownTimer(100,1500) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if(handi || plrs || hors || nom.equals("???")) {
+                    envoyerMail(nom,prenom,plaque);
+                }
+                else {
+                    new CountDownTimer(2000,1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                        }
+                        @Override
+                        public void onFinish() {
+                            Intent i = new Intent(Validation.this,MainActivity.class);
+                            startActivity(i);
+                        }
+                    }.start();
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Validation.this,MainActivity.class);
+        startActivity(i);
     }
 
     private void envoyerMail(String nom, String prenom, String plaque) {

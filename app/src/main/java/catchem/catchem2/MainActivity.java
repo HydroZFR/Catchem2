@@ -64,13 +64,6 @@ import catchem.catchem2.menu.Menu;
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private GestureDetectorCompat gestureDetector;
-    private EditText editTextNom;
-    private EditText editTextPrenom;
-    private Button buttonEnvoyer;
-    //    private final static String KEY_NOM = "nom";
-//    private final static String KEY_PRENOM = "prenom";
-//    private final static String KEY_PLAQUE = "plaque";
-//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static BDD uneBDD;
 
     private CameraSource cameraSource;
@@ -203,6 +196,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         });
             //==**== Fin ==**==
         //==--------== Fin de création des autres éléments ==--------==
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    requestPermissionID);
+        }
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    requestPermissionID);
+        }
         //Initialisation de la caméra
         startCameraSource();
     }
@@ -409,8 +414,22 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 intent.putExtra("nom",nom);
                 intent.putExtra("prenom",prenom);
                 intent.putExtra("validation", true);
+                intent.putExtra("handi", handi.isChecked());
+                intent.putExtra("plrs", plrs.isChecked());
+                intent.putExtra("hors", hors.isChecked());
+                startActivity(intent);
                 break;
         }
+    }
+
+    private String genererListeInfraction() {
+        String liste ="";
+        if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
+        if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
+        if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
+
+        return liste;
+
     }
 
     private void majInfosPlate() {
@@ -425,17 +444,24 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         time.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(stateButtons.getVisibility()==View.VISIBLE) {
-                    first.setText("Prénom : "+first.getText());
-                    surn.setText("Nom : "+surn.getText());
-                    if(first.getText().equals("")) {
-                        nom = "???";
-                        prenom = "???";
-                    } else {
-                        nom = first.getText().toString();
-                        prenom = surn.getText().toString();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(stateButtons.getVisibility()==View.VISIBLE) {
+                            if(first.getText().equals("")) {
+                                nom = "???";
+                                prenom = "???";
+                            } else {
+                                nom = first.getText().toString();
+                                prenom = surn.getText().toString();
+                            }
+                            first.setText("Prénom : "+first.getText());
+                            surn.setText("Nom : "+surn.getText());
+                            Log.e("LogTest",nom+" ; "+prenom);
+                            cancel();
+                        }
                     }
-                }
+                });
             }
         },10,200);
     }
@@ -490,15 +516,5 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-    }
-
-    private String genererListeInfraction() {
-        String liste ="";
-        if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
-        if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
-        if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
-
-        return liste;
-
     }
 }
