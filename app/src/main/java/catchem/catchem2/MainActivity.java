@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private LinearLayout plateDidact, stateButtons, typePlace, validPlate, infosPlate;
     private EditText validEditPlate;
     private Button retour, suivant;
+    private Bitmap savePict;
 
     public static final int requestPermissionID = 1;
     public int state = 0;
@@ -108,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 cameraSource.takePicture(null, new CameraSource.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        savePict = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
-                        pictView.setImageBitmap(bitmap);
+                        pictView.setImageBitmap(savePict);
                         validEditPlate.setText(plate1.getText());
                         state = 1;
                         switchState();
@@ -127,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 cameraSource.takePicture(null, new CameraSource.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        savePict = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         surfaceView.setVisibility(View.GONE);
                         pictView.setVisibility(View.VISIBLE);
-                        pictView.setImageBitmap(bitmap);
+                        pictView.setImageBitmap(savePict);
                         validEditPlate.setText(plate2.getText());
                         state = 1;
                         switchState();
@@ -449,20 +450,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 String surn = ((TextView) findViewById(R.id.surname)).getText().toString(),
                         firn = ((TextView) findViewById(R.id.firstname)).getText().toString(),
                         plaque = validEditPlate.getText().toString();
-//                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/imageTmp.png";
-//                FileOutputStream out = null;
-//                try {
-//                    out = new FileOutputStream(new File(outpath));
-//                    Bitmap bitmap = pictView.getDrawingCache();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//                    out.flush();
-//                    out.close();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-                // new Pdf(surn,firn,plat);
+                String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/imageTmp.png";
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(new File(outpath));
+                    savePict.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 try {
 
                   new Pdf(surn, firn, plaque, this);
@@ -472,13 +471,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     e.printStackTrace();
                 }
 
-                envoyerMail(plaque);
+                envoyerMail(surn, firn,plaque);
                 break;
         }
     }
 
-    private void envoyerMail(String plaque) {
-       // String filename = "DCIM/PDF/1.pdf";
+    private void envoyerMail(String nom, String prenom, String plaque) {
         String filename = "DCIM/PDF/"+plaque+".pdf";
         File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
        // Uri path = Uri.fromFile(filelocation);
@@ -494,6 +492,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
 // set the type to 'email'
         emailIntent.setType("vnd.android.cursor.dir/email");
+       if(nom.length()<20){
+           String emailEtudiant = prenom+"."+nom+".etu@univ-lemans.fr";
+           Log.i("azerty", emailEtudiant);
+           String mail[] = {uneBDD.getMailSignalement(), emailEtudiant};
+       }else{
+           String mail[] = {uneBDD.getMailSignalement()};
+       }
+
         String mail[] = {uneBDD.getMailSignalement()};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
 // the attachment

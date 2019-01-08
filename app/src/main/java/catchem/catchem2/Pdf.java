@@ -18,6 +18,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -68,14 +69,15 @@ public class Pdf extends Activity {
         if (!repDejaExistant)
             rep.mkdirs();
 
-        Document doc = new Document();
+        Document doc = new Document(PageSize.A4);
 
         String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + plaque + ".pdf";
 
         PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
+
         doc.open();
 
-     //   InputStream inputStream = context.getAssets().open("deuxlogos.jpg");
+
 
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
 
