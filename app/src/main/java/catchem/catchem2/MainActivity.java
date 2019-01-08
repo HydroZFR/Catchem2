@@ -6,10 +6,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,6 +32,7 @@ import android.widget.TextView;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
+import com.itextpdf.text.DocumentException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -348,6 +351,34 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 envoyerMail(plaque);
                 break;
         }
+    }
+
+    private void envoyerMail(String plaque) {
+        // String filename = "DCIM/PDF/1.pdf";
+        String filename = "DCIM/PDF/"+plaque+".pdf";
+        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
+        // Uri path = Uri.fromFile(filelocation);
+
+
+        Uri path = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".my.package.name.provider", filelocation);
+
+
+
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+// set the type to 'email'
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        String mail[] = {uneBDD.getMailSignalement()};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
+// the attachment
+        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+// the mail subject
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Véhicule mal garé.");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Ceci est un mail envoyé automatiquement depuis l'application Catch'em. \n Merci de ne pas y repondre.\n\n\n\n Equipe Catch'em.");
+
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     private void majInfosPlate() {
