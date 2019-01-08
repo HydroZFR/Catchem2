@@ -118,9 +118,14 @@
                         android:id="@+id/handiBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10px"
                         android:layout_weight="1"
+                        android:background="@color/colorPrimaryDark"
                         android:checked="false"
+                        android:color="@android:color/white"
+                        android:state_pressed="true"
                         android:text="Handicapée"
+                        android:textColor="@android:color/white"
                         android:textOff="Handicapée"
                         android:textOn="Handicapée" />
 
@@ -128,10 +133,15 @@
                         android:id="@+id/plrsPlacesBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10px"
                         android:layout_weight="1"
+                        android:background="@color/colorPrimaryDark"
                         android:checked="false"
                         android:text="Plusieurs Places"
+                        android:textColor="@android:color/white"
                         android:textOff="Plusieurs Places"
+
+
                         android:textOn="Plusieurs Places" />
                 </TableRow>
 
@@ -145,20 +155,30 @@
                         android:id="@+id/horsParkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10px"
                         android:layout_weight="1"
+                        android:background="@color/colorPrimaryDark"
                         android:checked="false"
                         android:text="Hors Parking"
+                        android:textColor="@android:color/white"
                         android:textOff="Hors Parking"
+
+
                         android:textOn="Hors Parking" />
 
                     <ToggleButton
                         android:id="@+id/wgParkBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10px"
                         android:layout_weight="1"
+                        android:background="@color/colorPrimaryDark"
                         android:checked="false"
                         android:text="Mauvais Parking"
+                        android:textColor="@android:color/white"
                         android:textOff="Mauvais Parking"
+
+
                         android:textOn="Mauvais Parking" />
                 </TableRow>
 
@@ -198,15 +218,25 @@
                 android:id="@+id/retour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10px"
                 android:layout_weight="1"
-                android:text="Retour" />
+
+                android:background="@color/colorAccent"
+                android:text="Retour"
+
+
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/suivant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10px"
                 android:layout_weight="1"
-                android:text="Suivant" />
+                android:background="@color/colorButton"
+                android:text="Suivant"
+                android:textColor="@android:color/white" />
+
         </LinearLayout>
 
     </LinearLayout>
