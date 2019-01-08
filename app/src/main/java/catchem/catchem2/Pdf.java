@@ -18,6 +18,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -68,14 +69,15 @@ public class Pdf extends Activity {
         if (!repDejaExistant)
             rep.mkdirs();
 
-        Document doc = new Document();
+        Document doc = new Document(PageSize.A4);
 
-        String outpath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + plaque + ".pdf";
+        String outpathPDF = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + plaque + ".pdf";
 
-        PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpath));
+        PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(outpathPDF));
+
         doc.open();
 
-     //   InputStream inputStream = context.getAssets().open("deuxlogos.jpg");
+
 
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.icon);
 
@@ -107,24 +109,22 @@ public class Pdf extends Activity {
         paragraph1.setAlignment(Element.ALIGN_CENTER);
         doc.add(paragraph1);
 
-        Bitmap bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.vehicule);
-        ByteArrayOutputStream outputStream1 = new ByteArrayOutputStream();
-        bitmap1.compress(Bitmap.CompressFormat.PNG, 100, outputStream1);
-        Image imageVehicule = Image.getInstance(outputStream1.toByteArray());
 
-        imageVehicule.setAbsolutePosition(30, 200);
-        imageVehicule.scalePercent(30);
-        doc.add(imageVehicule);
 
-        Bitmap bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.maps);
+        String outpathPhoto = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/" + plaque + ".png";
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap photoDeLaVoiture = BitmapFactory.decodeFile(outpathPhoto, options);
+        //selected_photo.setImageBitmap(bitmap);
         ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
-        bitmap2.compress(Bitmap.CompressFormat.PNG, 100, outputStream2);
-        Image localisationMaps = Image.getInstance(outputStream2.toByteArray());
-
-        localisationMaps.setAbsolutePosition(doc.getPageSize().getWidth() / 2, 200);
-        localisationMaps.setAlignment(Element.ALIGN_RIGHT);
-        localisationMaps.scalePercent(30);
-        doc.add(localisationMaps);
+        photoDeLaVoiture.compress(Bitmap.CompressFormat.PNG, 100, outputStream2);
+        Image photoVoiture = Image.getInstance(outputStream2.toByteArray());
+        //photoVoiture.setAbsolutePosition(doc.getPageSize().getWidth() / 2, 200);
+        photoVoiture.setAbsolutePosition(170, 120);
+        photoVoiture.setAlignment(Element.ALIGN_CENTER);
+        photoVoiture.scalePercent(20);
+        doc.add(photoVoiture);
 
 
         Rectangle rectangle3 = new Rectangle(0, 25, doc.getPageSize().getWidth(), 82);
