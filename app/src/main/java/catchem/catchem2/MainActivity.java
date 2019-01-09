@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     e.printStackTrace();
                 }
                 try {
-                    new Pdf(surn, firn, plaque, genererListeInfraction(), nbSautLigne(), this);
+                    new Pdf(nom, prenom, plaque, genererListeInfraction(), nbSautLigne(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (DocumentException e) {

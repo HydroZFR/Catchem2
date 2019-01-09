@@ -204,7 +204,7 @@ public class BDD {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("ERREUR", "Problème recherche");
+                Log.e("ERREUR", "Problème de recherche");
             }
         });
     }
@@ -260,7 +260,7 @@ public class BDD {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e("ERREUR", "Problème recherche");
+                Log.e("ERREUR", "Problème de recherche");
             }
         });
     }

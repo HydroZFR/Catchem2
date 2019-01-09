@@ -41,7 +41,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
             MainActivity.uneBDD.setMailSignalement(adresseMail);
             Toast.makeText(this, "Enregistré", Toast.LENGTH_SHORT).show();
         } else
-            Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Champ incorrect", Toast.LENGTH_SHORT).show();
     }
 
     private boolean verifChamp() {
@@ -52,7 +52,7 @@ public class Menu_ModifierMail extends AppCompatActivity {
         }
         if (!this.mail.getText().toString().equals("")) {
             if (!verifSyntax()) {
-                this.mail.setError("Syntax incorrecte");
+                this.mail.setError("Syntaxe incorrecte");
                 champRemplie = false;
             }
         }

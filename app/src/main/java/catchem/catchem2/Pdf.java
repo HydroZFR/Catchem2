@@ -99,13 +99,13 @@ public class Pdf extends Activity {
 
 
         doc.add(new Paragraph("\n\n\n\nObjet : Stationnement encombrant.", bigBold));
-        doc.add(new Paragraph("\n\nBonjour, \n\n Je vous informe qu'une voiture à été signalée comme mal garée ou dérangeante. Voici les informations relative à ce véhicule :", blackFont));
+        doc.add(new Paragraph("\n\nBonjour, \n\n Je vous informe qu'une voiture a été signalée comme mal garée ou dérangeante. Voici les informations relatives à ce véhicule :", blackFont));
         doc.add(new Paragraph(("\n         - nom du propriétaire             : " + nom), blackFont));
         doc.add(new Paragraph(("\n         - prénom du propriétaire        : " + prenom), blackFont));
         doc.add(new Paragraph(("\n         - Plaque d'immatriculation     : " + plaque), blackFont));
         doc.add(new Paragraph("\n         - Date de l'infraction               : " + recupererDate(), blackFont));
         doc.add(new Paragraph("\n         - Liste de ou des infractions  : " + infractions, blackFont));
-        doc.add(new Paragraph("\nMerci de faire le nécéssaire afin de rétablir l'ordre au sein du parking.", blackFont));
+        doc.add(new Paragraph("\nMerci de faire le nécessaire afin de rétablir l'ordre au sein du parking.", blackFont));
         doc.add(new Paragraph("Cordialement.", blackFont));
 
             Paragraph paragraph1 = new Paragraph("");

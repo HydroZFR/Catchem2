@@ -29,7 +29,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
     private Button modifieDonne;
     private Button modifieMail;
     private Button effacerDonnees;
-    RelativeLayout layoutBtnSuppr;
+    private RelativeLayout layoutBtnSuppr;
 
 
     @Override
@@ -68,7 +68,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
 
                 final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(modifieDonne.getContext());
                 alertDialogSupressionPersonne.setTitle("Suppression");
-                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer tout les PDF et les images ?");
+                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer tous les PDF et les images ?");
                 alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -83,7 +83,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
                         }
                         // path.delete();
                         Context context = getApplicationContext();
-                        CharSequence text = "Toutes les données ont été éffacées";
+                        CharSequence text = "Toutes les données ont été effacées";
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);

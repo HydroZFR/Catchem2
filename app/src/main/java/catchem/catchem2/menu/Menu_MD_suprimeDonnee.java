@@ -33,7 +33,16 @@ public class Menu_MD_suprimeDonnee extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linearLayoutAffichage.removeAllViews();
+        editTextNom.setText("");
+        editTextPrenom.setText("");
+    }
+
     private void afficherLaRecherche() {
         MainActivity.uneBDD.rechercheSupprimer(editTextNom.getText().toString(), editTextPrenom.getText().toString(), linearLayoutAffichage);
     }
+
 }

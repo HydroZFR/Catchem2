@@ -20,7 +20,6 @@ import java.util.TimerTask;
 public class Validation extends AppCompatActivity {
 
     String plaque, nom, prenom, mailG;
-    static BDD uneBDD;
     boolean handi,plrs,hors;
 
     @Override
@@ -40,15 +39,16 @@ public class Validation extends AppCompatActivity {
         handi = getIntent().getBooleanExtra("handi",false);
         plrs = getIntent().getBooleanExtra("plrs",false);
         hors = getIntent().getBooleanExtra("hors",false);
+        mailG = MainActivity.uneBDD.getMailSignalement();
         Log.e("LogTest","n"+nom);
         Log.e("LogTest","p"+prenom);
         Log.e("LogTest","p"+plaque);
-        uneBDD = new BDD(this);
         if(handi || plrs || hors || nom.equals("???")) {
             view.setImageResource(R.drawable.invalide);
-            valid.setText("La personne est mal garée un mail\nva être envoyé veuillez patienter ...");
-        } else
-            valid.setText("La personne est bien garée\nretour au menu ...");
+            valid.setText("La personne est mal garée, un mail\nva être envoyé, veuillez patienter...");
+        } else {
+            valid.setText("La personne est bien garée\nretour au menu...");
+        }
         new CountDownTimer(500,1000) {
 
             @Override
@@ -62,11 +62,8 @@ public class Validation extends AppCompatActivity {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            if(mailG == null)mailG = Validation.uneBDD.getMailSignalement();
-                            else {
                                 envoyerMail(nom,prenom,plaque);
                                 cancel();
-                            }
                         }
                     },200,200);
                 }
@@ -84,11 +81,6 @@ public class Validation extends AppCompatActivity {
                 }
             }
         }.start();
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Validation.uneBDD.getMailSignalement(); // recuperer mail pour afficher instantanément
     }
 
     @Override
