@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Validation extends AppCompatActivity {
 
-    String plaque, nom, prenom;
-    BDD uneBDD;
+    String plaque, nom, prenom, mailG;
+    static BDD uneBDD;
     boolean handi,plrs,hors;
 
     @Override
@@ -47,7 +49,7 @@ public class Validation extends AppCompatActivity {
             valid.setText("La personne est mal garée un mail\nva être envoyé veuillez patienter ...");
         } else
             valid.setText("La personne est bien garée\nretour au menu ...");
-        new CountDownTimer(100,1500) {
+        new CountDownTimer(500,1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -57,7 +59,16 @@ public class Validation extends AppCompatActivity {
             @Override
             public void onFinish() {
                 if(handi || plrs || hors || nom.equals("???")) {
-                    envoyerMail(nom,prenom,plaque);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if(mailG == null)mailG = Validation.uneBDD.getMailSignalement();
+                            else {
+                                envoyerMail(nom,prenom,plaque);
+                                cancel();
+                            }
+                        }
+                    },200,200);
                 }
                 else {
                     new CountDownTimer(2000,1000) {
@@ -73,6 +84,11 @@ public class Validation extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Validation.uneBDD.getMailSignalement(); // recuperer mail pour afficher instantanément
     }
 
     @Override
@@ -97,15 +113,9 @@ public class Validation extends AppCompatActivity {
 
 // set the type to 'email'
         emailIntent.setType("vnd.android.cursor.dir/email");
-        if(nom.length()<20){
-            String emailEtudiant = prenom+"."+nom+".etu@univ-lemans.fr";
-            Log.i("azerty", emailEtudiant);
-            String mail[] = {uneBDD.getMailSignalement(), emailEtudiant};
-        }else{
-            String mail[] = {uneBDD.getMailSignalement()};
-        }
+        String mail[] = getMails();
 
-        String mail[] = {uneBDD.getMailSignalement()};
+
         emailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
 // the attachment
         emailIntent.putExtra(Intent.EXTRA_STREAM, path);
@@ -114,5 +124,17 @@ public class Validation extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Ceci est un mail envoyé automatiquement depuis l'application Catch'em. \n Merci de ne pas y repondre.\n\n\n\n Equipe Catch'em.");
 
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    }
+
+    private String[] getMails() {
+        String[] m = new String[2];
+        if(!nom.equals("???")){
+            String emailEtudiant = prenom+"."+nom+".etu@univ-lemans.fr";
+            Log.i("azerty", emailEtudiant);
+            m[0]=mailG;m[1]=emailEtudiant;
+        }else{
+            m[0]=mailG;
+        }
+        return m;
     }
 }

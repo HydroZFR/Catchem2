@@ -13,6 +13,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -27,9 +29,12 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
     private Button modifieDonne;
     private Button modifieMail;
     private Button effacerDonnees;
+    RelativeLayout layoutBtnSuppr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         gestureDetector = new GestureDetectorCompat(this, this);
@@ -59,6 +64,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
         effacerDonnees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                layoutBtnSuppr = findViewById(R.id.Layout_suppr);
 
                 final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(modifieDonne.getContext());
                 alertDialogSupressionPersonne.setTitle("Suppression");

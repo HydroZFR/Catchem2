@@ -464,8 +464,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                                 nom = "???";
                                 prenom = "???";
                             } else {
-                                nom = first.getText().toString();
-                                prenom = surn.getText().toString();
+                                nom = surn.getText().toString();
+                                prenom = first.getText().toString();
                             }
                             first.setText("Prénom : "+first.getText());
                             surn.setText("Nom : "+surn.getText());
