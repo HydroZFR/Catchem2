@@ -1,7 +1,9 @@
 package catchem.catchem2.menu;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,7 +11,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+
+import java.io.File;
 
 import catchem.catchem2.MainActivity;
 import catchem.catchem2.R;
@@ -19,6 +24,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
     private GestureDetectorCompat gestureDetector;
     private Button modifieDonne;
     private Button modifieMail;
+    private Button effacerDonnees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,7 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
         setContentView(R.layout.activity_menu);
         gestureDetector = new GestureDetectorCompat(this, this);
         gestureDetector.setOnDoubleTapListener(this);
+
         modifieDonne = (Button) findViewById(R.id.ModifierDonnee);
         modifieDonne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +52,29 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
             }
 
         });
+
+        effacerDonnees = (Button) findViewById(R.id.effacerDonnes);
+        effacerDonnees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/");
+                 if( path.exists() ) {
+                    File[] files = path.listFiles();
+                    for(int i=0; i<files.length; i++) {
+                            files[i].delete();
+                    }
+                }
+               // path.delete();
+                Context context = getApplicationContext();
+                CharSequence text = "Toutes les données ont été éffacées";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+
+        });
+
     }
 
     @Override
