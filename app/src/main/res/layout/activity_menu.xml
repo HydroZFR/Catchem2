@@ -88,5 +88,22 @@
             tools:ignore="MissingConstraints" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/effacerDonnes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Effacer les données"
+            tools:ignore="DuplicateIds"
+            android:background="@color/colorAccent"
+
+            />
+
+    </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

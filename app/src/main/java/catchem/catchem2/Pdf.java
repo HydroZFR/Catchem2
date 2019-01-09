@@ -120,7 +120,7 @@ public class Pdf extends Activity {
         Bitmap photoDeLaVoiture = BitmapFactory.decodeFile(outpathPhoto, options);
         //selected_photo.setImageBitmap(bitmap);
         ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
-        photoDeLaVoiture.compress(Bitmap.CompressFormat.PNG, 3, outputStream2);
+        photoDeLaVoiture.compress(Bitmap.CompressFormat.PNG, 100, outputStream2);
         Image photoVoiture = Image.getInstance(outputStream2.toByteArray());
         //photoVoiture.setAbsolutePosition(doc.getPageSize().getWidth() / 2, 200);
         photoVoiture.setAbsolutePosition(230, 120);
