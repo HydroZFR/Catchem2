@@ -1,6 +1,8 @@
 package catchem.catchem2.menu;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -57,20 +59,40 @@ public class Menu extends AppCompatActivity implements GestureDetector.OnGesture
         effacerDonnees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/");
-                 if( path.exists() ) {
-                    File[] files = path.listFiles();
-                    for(int i=0; i<files.length; i++) {
-                            files[i].delete();
-                    }
-                }
-               // path.delete();
-                Context context = getApplicationContext();
-                CharSequence text = "Toutes les données ont été éffacées";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                final AlertDialog.Builder alertDialogSupressionPersonne = new AlertDialog.Builder(modifieDonne.getContext());
+                alertDialogSupressionPersonne.setTitle("Suppression");
+                alertDialogSupressionPersonne.setMessage("Voulez-vous vraiment supprimer tout les PDF et les images ?");
+                alertDialogSupressionPersonne.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        File path = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/PDF/");
+                        if( path.exists() ) {
+                            File[] files = path.listFiles();
+                            for(int i=0; i<files.length; i++) {
+                                files[i].delete();
+                            }
+                        }
+                        // path.delete();
+                        Context context = getApplicationContext();
+                        CharSequence text = "Toutes les données ont été éffacées";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+
+                    }
+                });
+                alertDialogSupressionPersonne.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialogSupressionPersonne.show();
+
             }
 
         });

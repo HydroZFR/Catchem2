@@ -97,9 +97,11 @@
             android:id="@+id/effacerDonnes"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Effacer les données"
+            android:text="Effacer les images et les PDF"
             tools:ignore="DuplicateIds"
             android:background="@color/colorAccent"
+            android:textColor="@android:color/background_light"
+
 
             />
 
