@@ -41,10 +41,16 @@ public class Menu_MD_modifierDonnee extends AppCompatActivity {
         linearLayout_Affichage = (LinearLayout) findViewById(R.id.layoutAffichage);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        linearLayout_Affichage.removeAllViews();
+        editText_Prenom.setText("");
+        editText_Nom.setText("");
+    }
+
     public void afficherLaRecherche(){
         MainActivity.uneBDD.rechercheModifier(editText_Nom.getText().toString(), editText_Prenom.getText().toString(), linearLayout_Affichage);
     }
-
-
 
 }

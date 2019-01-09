@@ -32,6 +32,9 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_md_ajouter_donner);
+        this.nom = (EditText) findViewById(R.id.nom);
+        this.prenom = (EditText) findViewById(R.id.prenom);
+        this.immatriculation1 = (EditText) findViewById(R.id.immatriculation);
         this.ajouteImma = (Button) findViewById(R.id.ajouteImma);
         this.ajouteImma.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,14 +51,26 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.nom.setText("");
+        this.prenom.setText("");
+        this.immatriculation1.setText("");
+        if (this.nouvelleImma != null) {
+            linearyLayoutImma.removeView(this.nouvelleImma);
+            nbLigne = 0;
+        }
+    }
+
     public void ajouterImmatriculation() {
         if (nbLigne == 0) {
             nouvelleImma = new EditText(this);
             if (nouvelleImma.getParent() != null) {
                 nouvelleImma.getParent().clearChildFocus(nouvelleImma);
-                ViewGroup parentViexGroup = (ViewGroup) nouvelleImma.getParent();
-                if (parentViexGroup != null) {
-                    parentViexGroup.removeView(nouvelleImma);
+                ViewGroup parentViewGroup = (ViewGroup) nouvelleImma.getParent();
+                if (parentViewGroup != null) {
+                    parentViewGroup.removeView(nouvelleImma);
                 }
             }
             linearyLayoutImma = (LinearLayout) findViewById(R.id.linearyLayoutImma);
@@ -69,9 +84,6 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
     }
 
     public void ajouter() {
-        this.nom = (EditText) findViewById(R.id.nom);
-        this.prenom = (EditText) findViewById(R.id.prenom);
-        this.immatriculation1 = (EditText) findViewById(R.id.immatriculation);
         if (this.verifChamp() == true) {
             String nom = this.nom.getText().toString();
             String prenom = this.prenom.getText().toString();
@@ -89,7 +101,11 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
                 }
             }
             MainActivity.uneBDD.ajouterPersonne(nom, prenom, tabImmatriculation);
-            Toast.makeText(this, "Enregsitrer", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enregsitré", Toast.LENGTH_SHORT).show();
+            this.nom.setText("");
+            this.prenom.setText("");
+            this.immatriculation1.setText("");
+            if (this.nouvelleImma != null) this.nouvelleImma.setText("");
         } else
             Toast.makeText(this, "Champ incorrecte", Toast.LENGTH_SHORT).show();
     }
@@ -110,14 +126,14 @@ public class Menu_MD_ajouterDonner extends AppCompatActivity {
         }
         if (!this.immatriculation1.getText().toString().equals("")) {
             if (!Utilitaire.syntaxImmatriculation(this.immatriculation1)) {
-                this.immatriculation1.setError("Syntax incorrecte");
+                this.immatriculation1.setError("Syntaxe incorrecte");
                 champRemplie = false;
             }
         }
         if (this.nouvelleImma != null) {
             if(!this.nouvelleImma.getText().toString().equals("")) {
                 if (!Utilitaire.syntaxImmatriculation(this.nouvelleImma)) {
-                    this.nouvelleImma.setError("Syntax incorrecte");
+                    this.nouvelleImma.setError("Syntaxe incorrecte");
                     champRemplie = false;
                 }
             }

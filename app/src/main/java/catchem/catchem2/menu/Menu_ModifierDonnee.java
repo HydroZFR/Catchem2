@@ -42,7 +42,7 @@ public class Menu_ModifierDonnee extends TabActivity implements GestureDetector.
 
         intent = new Intent().setClass(this, Menu_MD_suprimeDonnee.class);
         spec = tabHost.newTabSpec("supprimer")
-                .setIndicator("Suprimer")
+                .setIndicator("Supprimer")
                 .setContent(intent);
         tabHost.addTab(spec);
         tabHost.setCurrentTab(0);
