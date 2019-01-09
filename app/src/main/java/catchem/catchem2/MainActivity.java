@@ -215,6 +215,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         startCameraSource();
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MainActivity.uneBDD.getMailSignalement(); // recuperer mail pour afficher instantanément
+    }
+
     private void startCameraSource() {
         //Create the TextRecognizer
         final com.google.android.gms.vision.text.TextRecognizer textRecognizer = new com.google.android.gms.vision.text.TextRecognizer.Builder(getApplicationContext()).build();
