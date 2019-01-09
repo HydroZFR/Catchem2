@@ -54,6 +54,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,13 +64,6 @@ import catchem.catchem2.menu.Menu;
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private GestureDetectorCompat gestureDetector;
-    private EditText editTextNom;
-    private EditText editTextPrenom;
-    private Button buttonEnvoyer;
-    //    private final static String KEY_NOM = "nom";
-//    private final static String KEY_PRENOM = "prenom";
-//    private final static String KEY_PLAQUE = "plaque";
-//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static BDD uneBDD;
 
     private CameraSource cameraSource;
@@ -85,11 +80,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private ImageView pictView;
     private Bitmap savePict;
     private String nom, prenom;
-    private ToggleButton handi, plrs, hors, mauvais;
+    private ToggleButton handi, plrs, hors;
 
     public static final int requestPermissionID = 1;
     public int state = 0;
     private boolean isTimeP1;
+    int x =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         handi = findViewById(R.id.handiBtn);
         plrs = findViewById(R.id.plrsPlacesBtn);
         hors = findViewById(R.id.horsParkBtn);
-        mauvais = findViewById(R.id.wgParkBtn);
         //==--------== Fin de récupération des views ==--------==
         //============ Positionnement des views ============
         pictView.setMinimumHeight(windowSize.y);
@@ -200,17 +195,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     hors.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
             }
         });
-        mauvais.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mauvais.isChecked())
-                    mauvais.setBackgroundColor(getResources().getColor(R.color.colorAccent, getTheme()));
-                else
-                    mauvais.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark, getTheme()));
-            }
-        });
             //==**== Fin ==**==
         //==--------== Fin de création des autres éléments ==--------==
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    requestPermissionID);
+        }
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    requestPermissionID);
+        }
         //Initialisation de la caméra
         startCameraSource();
     }
@@ -388,7 +386,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case 2:
                 majInfosPlate();
                 underView.setMinimumHeight(windowSize.y/3);
-                stateButtons.setVisibility(View.VISIBLE);
                 infosPlate.setVisibility(View.VISIBLE);
                 break;
             case 3:
@@ -414,70 +411,71 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     e.printStackTrace();
                 }
                 try {
-                    new Pdf(surn, firn, plaque, genererListeInfraction(), this);
+                    new Pdf(surn, firn, plaque, genererListeInfraction(), nbSautLigne(), this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (DocumentException e) {
                     e.printStackTrace();
                 }
-                envoyerMail(plaque,nom,prenom);
+                Intent intent = new Intent(MainActivity.this,Validation.class);
+                intent.putExtra("plaque",plaque);
+                intent.putExtra("nom",nom);
+                intent.putExtra("prenom",prenom);
+                intent.putExtra("validation", true);
+                intent.putExtra("handi", handi.isChecked());
+                intent.putExtra("plrs", plrs.isChecked());
+                intent.putExtra("hors", hors.isChecked());
+                startActivity(intent);
                 break;
         }
     }
 
-
-
-    private void envoyerMail(String nom, String prenom, String plaque) {
-        String filename = "DCIM/PDF/"+plaque+".pdf";
-        File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
-        // Uri path = Uri.fromFile(filelocation);
-
-
-        Uri path = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".my.package.name.provider", filelocation);
-
-
-
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-// set the type to 'email'
-        emailIntent.setType("vnd.android.cursor.dir/email");
-       if(nom.length()<20){
-           String emailEtudiant = prenom+"."+nom+".etu@univ-lemans.fr";
-           Log.i("azerty", emailEtudiant);
-           String mail[] = {uneBDD.getMailSignalement(), emailEtudiant};
-       }else{
-           String mail[] = {uneBDD.getMailSignalement()};
-       }
-
-        String mail[] = {uneBDD.getMailSignalement()};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, mail);
-// the attachment
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
-// the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Véhicule mal garé.");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Ceci est un mail envoyé automatiquement depuis l'application Catch'em. \n Merci de ne pas y repondre.\n\n\n\n Equipe Catch'em.");
-
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
+    private String genererListeInfraction() {
+        String liste ="";
+        if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
+        if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
+        if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
+        return liste;
+    }
+    private int nbSautLigne() {
+        if (handi.isChecked()) x+=1;
+        if (plrs.isChecked()) x+=1;
+        if (hors.isChecked())x+=1;
+        return x;
     }
 
     private void majInfosPlate() {
-        TextView first = ((TextView)findViewById(R.id.firstname)),surn = ((TextView)findViewById(R.id.surname));
+        final TextView first = ((TextView)findViewById(R.id.firstname));
+        final TextView surn = ((TextView)findViewById(R.id.surname));
         ((TextView)findViewById(R.id.plateTitle)).setText("Plaque : "+validEditPlate.getText().toString().replaceAll("[- ]+","-"));
-        ((TextView)findViewById(R.id.surname)).setText("Chargement...");
-        ((TextView)findViewById(R.id.firstname)).setText("Chargement...");
+        surn.setText("Chargement...");
+        first.setText("Chargement...");
         uneBDD.recherchePlaque(validEditPlate.getText().toString().replaceAll("[- ]+"," "),
-                surn, first);
-        if(first.getText().equals("")) {
-            nom = "???";
-            prenom = "???";
-        } else {
-            nom = first.getText().toString();
-            prenom = surn.getText().toString();
-        }
-        first.setText("Prénom : "+first.getText());
-        surn.setText("Nom : "+surn.getText());
+                surn, first, stateButtons);
+        Timer time = new Timer();
+        time.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(stateButtons.getVisibility()==View.VISIBLE) {
+                            if(first.getText().equals("")) {
+                                nom = "???";
+                                prenom = "???";
+                            } else {
+                                nom = first.getText().toString();
+                                prenom = surn.getText().toString();
+                            }
+                            first.setText("Prénom : "+first.getText());
+                            surn.setText("Nom : "+surn.getText());
+                            Log.e("LogTest",nom+" ; "+prenom);
+                            cancel();
+                        }
+                    }
+                });
+            }
+        },10,200);
     }
 
     @Override
@@ -530,15 +528,5 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-    }
-
-    private String genererListeInfraction() {
-        String liste ="";
-        if (handi.isChecked()) liste += " - Garé sur une place handicapée \n                                                          ";
-        if (plrs.isChecked()) liste +=" - Garé sur plusieures places \n                                                          ";
-        if (hors.isChecked()) liste += " - Garé en dehors d'une place de parking ";
-
-        return liste;
-
     }
 }
