@@ -13,7 +13,10 @@ import android.view.Display;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.itextpdf.text.DocumentException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,7 +65,14 @@ public class Validation extends AppCompatActivity {
                     new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-                                envoyerMail(nom,prenom,plaque);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    genererPDF();
+                                    envoyerMail(nom,prenom,plaque);
+
+                                }
+                            });
                                 cancel();
                         }
                     },200,200);
@@ -81,6 +91,16 @@ public class Validation extends AppCompatActivity {
                 }
             }
         }.start();
+    }
+
+    private void genererPDF() {
+        try {
+            new Pdf(nom, prenom, plaque, genererListeInfraction(), nbSautLigne(), this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -128,5 +148,21 @@ public class Validation extends AppCompatActivity {
             m[0]=mailG;
         }
         return m;
+    }
+
+    private String genererListeInfraction() {
+        String liste ="";
+        if (handi) liste += " - Garé sur une place handicapée \n                                                          ";
+        if (plrs) liste +=" - Garé sur plusieures places \n                                                          ";
+        if (hors) liste += " - Garé en dehors d'une place de parking ";
+        return liste;
+    }
+
+    private int nbSautLigne() {
+        int x=0;
+        if (handi) x+=1;
+        if (plrs) x+=1;
+        if (hors)x+=1;
+        return x;
     }
 }
