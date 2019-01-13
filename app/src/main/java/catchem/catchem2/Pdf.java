@@ -3,6 +3,7 @@ package catchem.catchem2;
 import android.app.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -50,9 +51,9 @@ public class Pdf extends Activity {
     private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.RED);
 
-    MainActivity context;
+    Context context;
 
-    public Pdf(String nom, String prenom, String plaque, String infractions, int nbSautLigne, MainActivity context) throws IOException, DocumentException {
+    public Pdf(String nom, String prenom, String plaque, String infractions, int nbSautLigne, Context context) throws IOException, DocumentException {
 
 
         this.context = context;
